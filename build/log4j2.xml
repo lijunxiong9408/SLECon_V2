@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration status="OFF">
+    <appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="[%p] %d{yyy-MM-dd HH:mm:ss} %m%n"/>
+        </Console>
+        <RollingFile name="RollingFile" fileName="log.log"  filePattern="log-%d{MM-dd-yyyy}-%i.log.gz">
+            <PatternLayout pattern="[%p] %d{yyy-MM-dd HH:mm:ss} %m%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="24" modulate="true" />
+            </Policies>
+        </RollingFile>
+    </appenders>
+    <loggers>
+        <root level="info">
+            <appender-ref ref="Console"/>
+            <appender-ref ref="RollingFile"/>
+        </root>
+    </loggers>
+</configuration>

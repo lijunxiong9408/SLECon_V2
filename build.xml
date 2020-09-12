@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project basedir="." default="zip" name="SLECon">
+    <property name="debuglevel" value="source,lines,vars" />
+    <property name="target" value="1.7" />
+    <property name="source" value="1.7" />
+    <property environment="env" />
+    <property name="main.class" value="slecon.StartUI"/>
+    <property file="build.properties" />
+    <property file="version.properties" />
+    <filelist id="vecSpectra.dependjar" files="${vecSpectra.dependjar.file}" />
+
+    <path id="vecSpectra.classpath">
+        <pathelement location="${build.dir}" />
+        <filelist refid="vecSpectra.dependjar" />
+    </path>
+    
+    <!-- Binary release related. -->
+    <tstamp>
+        <format property="TODAY" pattern="yyyy-MM-dd" />
+        <format property="SIMPLEDATE" pattern="yyyyMMdd" />
+    </tstamp>
+    <property name="jar.file" value="SLECon.jar" />
+    <property name="dist.jar.file" value="${spec.title}.jar" /> <!-- -${spec.version}-${implement.title}${SIMPLEDATE}.jar" /> -->
+    <property name="zip.filename"  value="${project.name}.zip" />	<!-- (${TODAY}).zip"/> -->
+
+    <!-- Clean up. -->
+    <target name="clean">
+        <delete dir="${build.dir}" />
+        <delete dir="${dist.dir}" />
+    </target>
+    
+    <!-- Initialization. -->
+    <target name="init">
+        <mkdir dir="${build.dir}" />
+        <copy includeemptydirs="false" todir="${build.dir}">
+            <fileset dir="${src.dir}">
+                <exclude name="**/*.java" />
+            </fileset>
+            <fileset dir="data" />
+        </copy>
+    </target>
+    
+    <target depends="init" name="compile">
+        <echo message="${ant.project.name}: ${ant.file}" />
+        <javac debug="true" optimize="true" debuglevel="${debuglevel}" destdir="${build.dir}" includeantruntime="false" source="${source}" target="${target}">
+            <compilerarg line="-encoding utf-8" />
+            <src path="${src.dir}" />
+            <classpath refid="vecSpectra.classpath" />
+        </javac>
+    </target>
+    
+    <target depends="compile" name="build"></target>
+    
+    <target depends="build" name="jar">
+        <manifestclasspath property="jar.classpath" jarfile="${jar.file}">
+            <classpath>
+                <filelist refid="vecSpectra.dependjar" />
+            </classpath>
+        </manifestclasspath>
+        <jar jarfile="${jar.file}" basedir="${build.dir}">
+            <manifest>
+                <attribute name="Built-By" value="${user.name}" />
+                <attribute name="Main-Class" value="${main.class}" />
+                <attribute name="Class-Path" value="${jar.classpath}" />
+                <attribute name="SplashScreen-Image" value="${splashscreen}" />
+                <attribute name="Specification-Title" value="${spec.title}"/>
+               <!-- <attribute name="Specification-Version" value="${spec.version}"/>
+                <attribute name="Implementation-Title" value="${implement.title}"/>
+                <attribute name="Implementation-Version" value="${SIMPLEDATE} "/>
+                -->
+            </manifest>
+        </jar>
+    </target>
+    
+    <target depends="build, jar" name="dist" description="Creates the distribution(include obfuscate).">
+        <mkdir dir="${dist.dir}" />
+        <path id="proguard.dependjar">
+            <filelist refid="vecSpectra.dependjar" />
+        </path>
+        <property name="proguard.classpath" refid="proguard.dependjar"/>
+        <taskdef resource="proguard/ant/task.properties" classpath="lib/proguard.jar" />
+        <proguard>
+        	<![CDATA[
+            -injars ${jar.file}
+            -outjars '${dist.dir}/${dist.jar.file}'
+            -libraryjars ${proguard.classpath}
+            -libraryjars '${java.home}/lib/rt.jar'
+            -keepattributes Exceptions,Signature,LineNumberTable,Deprecated
+        	# -optimizations 'code/removal/simple'
+            -dontoptimize
+        	-repackageclasses
+            -verbose
+        	-keep class logic.util.Version {
+        		*** get**(...);
+        	}
+            
+            -keepclassmembers public class slecon.** {
+                public <init>(...);
+            }
+        	
+            -keepclassmembers public class slecon.setting.** {
+                *** createPanel(...);
+            }
+
+            -keepclasseswithmembers public class * {
+                public static void main(java.lang.String[]);
+            }
+        	
+			-keepclassmembers enum  * {
+			    public static **[] values();
+			    public static ** valueOf(java.lang.String);
+			}
+            ]]>
+        </proguard>
+        <copy todir="${dist.dir}/lib" flatten="true">
+            <filelist refid="vecSpectra.dependjar" />
+        </copy>
+
+        <copy todir="${dist.dir}">
+            <fileset dir="${res.dir}" />
+        </copy>
+    </target>
+
+    <target name="zip" depends="dist">
+        <zip zipfile="${zip.filename}">
+            <zipfileset dir="dist" />
+        </zip>
+    </target>
+    
+    <target name="upload" depends="zip">
+        <scp file="${zip.filename}" port="${remote.port}" todir="${remote.user}@${remote.host}:${remote.path}" password="${remote.password}" trust="true" />
+        <exec executable="git" output="${zip.filename}.githash">
+            <arg line="rev-parse HEAD"/>
+        </exec>
+        <scp file="${zip.filename}.githash" port="${remote.port}" todir="${remote.user}@${remote.host}:${remote.path.githash}" password="${remote.password}" trust="true" />
+    </target>
+    
+    <target depends="build" name="SetupTree">
+        <java classname="slecon.setting.SetupTree" failonerror="true" fork="yes">
+            <classpath refid="vecSpectra.classpath" />
+        </java>
+    </target>
+    
+    <target depends="build" name="StartUI">
+        <java classname="slecon.StartUI" failonerror="true" fork="yes">
+            <classpath refid="vecSpectra.classpath" />
+        </java>
+    </target>
+    
+    <target depends="build" name="InspectTree">
+        <java classname="slecon.inspect.InspectTree" failonerror="true" fork="yes">
+            <classpath refid="vecSpectra.classpath" />
+        </java>
+    </target>
+    
+    <target depends="build" name="SiteLiftDialog">
+        <java classname="slecon.dialog.connection.SiteLiftDialog"
+            failonerror="true" fork="yes">
+            <classpath refid="vecSpectra.classpath" />
+        </java>
+    </target>
+</project>
