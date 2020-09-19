@@ -26,7 +26,7 @@ public enum InputPinD01 {
     M2_7("2M.7", 0x36, false, ""),
     M2_8("2M.8", 0x33, false, ""),
     M2_9("2M.9", 0x34, false, ""),
-    M2_10("2M.9", 0x32, false, ""),
+    M2_10("2M.10", 0x32, false, ""),
     VS_2("VS.2", 0x6D, false, ""),
     VS_3("VS.3", 0x6E, false, ""),
     VS_7("VS.7", 0x6F, false, ""),

@@ -117,6 +117,7 @@ public enum ImageFactory {
 	SELECTOR( "images/Selected_Icon.png" ), 
 	DISSELECTOR( "images/DisSelected_Icon.png" ), 
 	IOSTATUS_BG( "images/IOStatus_bg.png" ), 
+	IOSTATUS_D01_BG( "images/IOStatus_D01_bg.png" ), 
 	DOOR_OPENED_ICON( "images/Door_Opened.png" ),
 	DOOR_OPENING_ICON( "images/Door_Opening.png" ), 
 	DOOR_CLOSING_ICON( "images/Door_Closing.png" ),

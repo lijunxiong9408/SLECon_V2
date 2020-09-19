@@ -125,11 +125,6 @@ public enum NVAddressD01 {
     NVADDR_IN_UCMTS_BITPOS( (short) 0x189e, NVAddressD01.UC),
     NVADDR_IN_UCMTS2_BITPOS( (short) 0x189f, NVAddressD01.UC),
     NVADDR_IN_UCMTS3_BITPOS( (short) 0x18a0, NVAddressD01.UC),
-    NVADDR_IN_DI1_BITPOS( (short) 0x18a1, NVAddressD01.UC),
-    NVADDR_IN_DI2_BITPOS( (short) 0x18a2, NVAddressD01.UC),
-    NVADDR_IN_DI3_BITPOS( (short) 0x18a3, NVAddressD01.UC),
-    NVADDR_IN_DI4_BITPOS( (short) 0x18a4, NVAddressD01.UC),
-    NVADDR_IN_DI5_BITPOS( (short) 0x18a5, NVAddressD01.UC),
     
     NVADDR_OUTBP_FIRST( (short) 0x18f0, NVAddressD01.UC), 
     NVADDR_OUTBP_K1( (short) 0x18f0, NVAddressD01.UC), 
@@ -197,8 +192,14 @@ public enum NVAddressD01 {
     NVADDR_EPS_XMBR( (short) 0x1943, NVAddressD01.UC),     // uc, XMBR output bit position
     NVADDR_EPS_BAT( (short) 0x1944, NVAddressD01.UC),     // uc, BAT output bit position
     NVADDR_EPS_RCR( (short) 0x1945, NVAddressD01.UC),     // uc, RCR output bit position
-    NVADDR_OUTBP_LAST( (short) 0x194F, NVAddressD01.UC);     // uc, last output bit position
+    NVADDR_OUTBP_LAST( (short) 0x194F, NVAddressD01.UC),    // uc, last output bit position
 	
+    NVADDR_IN_IM_BITPOS( (short) 0x1970, NVAddressD01.UC),	// uc, IM input bit position
+    NVADDR_IN_IU_BITPOS( (short) 0x1971, NVAddressD01.UC),	// uc, IU input bit position
+    NVADDR_IN_ID_BITPOS( (short) 0x1972, NVAddressD01.UC),	// uc, ID input bit position
+    NVADDR_IN_ISU_BITPOS( (short) 0x1973, NVAddressD01.UC),	// uc, ISU input bit position
+    NVADDR_IN_ISD_BITPOS( (short) 0x1974, NVAddressD01.UC);	// uc, ISD input bit position
+    
     private static final int UL    = 0;
     private static final int UI    = 1;
     private static final int UC    = 2;

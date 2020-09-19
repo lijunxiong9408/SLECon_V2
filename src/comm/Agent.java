@@ -38,7 +38,7 @@ public class Agent extends Thread {
     /**
      * MCS NVRAM data.
      */
-    public final byte[] mcs_nvram = new byte[ MCS_NVRAM_ADDR_COMMIT_WORD + 2559 ];
+    public final byte[] mcs_nvram = new byte[ MCS_NVRAM_ADDR_COMMIT_WORD + 2564 ];
 
     /**
      * Status data.

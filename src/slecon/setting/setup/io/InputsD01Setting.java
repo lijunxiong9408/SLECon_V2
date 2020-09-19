@@ -475,6 +475,51 @@ public class InputsD01Setting extends SettingPanel<InputsD01> implements Page, L
                 bean.setDlbInverted(isInverted);
             }
             
+            {
+                // NVADDR_IN_IM_BITPOS
+                int raw = nvram.getUnsignedByte(NVAddressD01.NVADDR_IN_IM_BITPOS.address).intValue();
+                boolean isInverted = raw > 0x7f;
+                int code = raw & 0x7f;
+                bean.setIm(InputPinD01.getByRawIOPosition(code));
+                bean.setImInverted(isInverted);
+            }
+            
+            {
+                // NVADDR_IN_IU_BITPOS
+                int raw = nvram.getUnsignedByte(NVAddressD01.NVADDR_IN_IU_BITPOS.address).intValue();
+                boolean isInverted = raw > 0x7f;
+                int code = raw & 0x7f;
+                bean.setIu(InputPinD01.getByRawIOPosition(code));
+                bean.setIuInverted(isInverted);
+            }
+            
+            {
+                // NVADDR_IN_ID_BITPOS
+                int raw = nvram.getUnsignedByte(NVAddressD01.NVADDR_IN_ID_BITPOS.address).intValue();
+                boolean isInverted = raw > 0x7f;
+                int code = raw & 0x7f;
+                bean.setId(InputPinD01.getByRawIOPosition(code));
+                bean.setIdInverted(isInverted);
+            }
+            
+            {
+                // NVADDR_IN_ISU_BITPOS
+                int raw = nvram.getUnsignedByte(NVAddressD01.NVADDR_IN_ISU_BITPOS.address).intValue();
+                boolean isInverted = raw > 0x7f;
+                int code = raw & 0x7f;
+                bean.setIsu(InputPinD01.getByRawIOPosition(code));
+                bean.setIsuInverted(isInverted);
+            }
+            
+            {
+                // NVADDR_IN_ISD_BITPOS
+                int raw = nvram.getUnsignedByte(NVAddressD01.NVADDR_IN_ISD_BITPOS.address).intValue();
+                boolean isInverted = raw > 0x7f;
+                int code = raw & 0x7f;
+                bean.setIsd(InputPinD01.getByRawIOPosition(code));
+                bean.setIsdInverted(isInverted);
+            }
+            
             if(solid==null)
                 solid = new Solid(bean);
             
@@ -524,6 +569,11 @@ public class InputsD01Setting extends SettingPanel<InputsD01> implements Page, L
 	            nvram.setByte( NVAddressD01.NVADDR_IN_UCMTS2_BITPOS.address, (byte) (bean.isUcmts2Inverted() ? ((int) bean.getUcmts2().rawIOPos)+128 : bean.getUcmts2().rawIOPos));
 	            nvram.setByte( NVAddressD01.NVADDR_IN_UCMTS3_BITPOS.address, (byte) (bean.isUcmts3Inverted() ? ((int) bean.getUcmts3().rawIOPos)+128 : bean.getUcmts3().rawIOPos));
 	            nvram.setByte( NVAddressD01.NVADDR_IN_DLB_BITPOS.address, (byte) (bean.isDlbInverted() ? ((int) bean.getDlb().rawIOPos)+128 : bean.getDlb().rawIOPos));
+	            nvram.setByte( NVAddressD01.NVADDR_IN_IM_BITPOS.address, (byte) (bean.isImInverted() ? ((int) bean.getIm().rawIOPos)+128 : bean.getIm().rawIOPos));
+	            nvram.setByte( NVAddressD01.NVADDR_IN_IU_BITPOS.address, (byte) (bean.isIuInverted() ? ((int) bean.getIu().rawIOPos)+128 : bean.getIu().rawIOPos));
+	            nvram.setByte( NVAddressD01.NVADDR_IN_ID_BITPOS.address, (byte) (bean.isIdInverted() ? ((int) bean.getId().rawIOPos)+128 : bean.getId().rawIOPos));
+	            nvram.setByte( NVAddressD01.NVADDR_IN_ISU_BITPOS.address, (byte) (bean.isIsuInverted() ? ((int) bean.getIsu().rawIOPos)+128 : bean.getIsu().rawIOPos));
+	            nvram.setByte( NVAddressD01.NVADDR_IN_ISD_BITPOS.address, (byte) (bean.isIsdInverted() ? ((int) bean.getIsd().rawIOPos)+128 : bean.getIsd().rawIOPos));
 	            
 	            nvram.commit();
 	            return true;

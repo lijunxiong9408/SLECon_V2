@@ -80,8 +80,8 @@ public class IOStatusD01 extends JPanel implements Page, LiftDataChangedListener
     	styles.put("sysPanel", "95 145 190 118 l");
     	styles.put("lblControl", "325 125 100 20 l");
     	styles.put("ctrlPanel", "325 145 350 118 l");
-    	styles.put("lblInspect", "770 125 100 20 l");
-    	styles.put("insectPanel", "770 145 142 118 l");
+    	styles.put("lblInspect", "745 125 100 20 l");
+    	styles.put("insectPanel", "745 145 142 118 l");
     	styles.put("lblDriver", "140 495 100 20 l");
     	styles.put("driverPanel", "140 515 300 100 l");
     	styles.put("lblSafety", "455 495 100 20 l");
@@ -92,7 +92,7 @@ public class IOStatusD01 extends JPanel implements Page, LiftDataChangedListener
     
     private static final BufferedImage bgImage;
     static {
-        Image img      = ImageFactory.IOSTATUS_BG.image();
+        Image img      = ImageFactory.IOSTATUS_D01_BG.image();
         int   imwidth  = img.getWidth( null );
         int   imheight = img.getHeight( null );
         bgImage = new BufferedImage( imwidth, imheight, BufferedImage.TYPE_4BYTE_ABGR );
@@ -156,7 +156,12 @@ public class IOStatusD01 extends JPanel implements Page, LiftDataChangedListener
     private InputSourceLabel 	  lblInIns;
     private InputSourceLabel	  lblInInsup;
     private InputSourceLabel 	  lblInInsdown;
-
+    private InputSourceLabel	  lblInInstall;
+    private InputSourceLabel	  lblInInstallup;
+    private InputSourceLabel	  lblInInstalldown;
+    private InputSourceLabel	  lblInInslimitup;
+    private InputSourceLabel 	  lblInInslimitdown;
+    
     /* Cabin */
     private JLabel            	  lblCabin;
     private InputSourceLabel  	  lblInFUdz;
@@ -348,13 +353,24 @@ public class IOStatusD01 extends JPanel implements Page, LiftDataChangedListener
         insectPanel.setOpaque( false );
         panelMain.add( insectPanel );
         StartUI.setStyle(layout, styles, insectPanel, "insectPanel");
-        insectPanel.setLayout( new MigLayout( "gap 5 3, ins 5", "[grow]", "[][][]" ) );
+        insectPanel.setLayout( new MigLayout( "gap 5 3, ins 5", "[grow][grow]", "[][][][][]" ) );
         lblInIns = new InputSourceLabel( "INS", InputSourceD01.INS, Type.INPUT );
         insectPanel.add( lblInIns, "cell 0 0" );
         lblInInsup = new InputSourceLabel( "INSUP", InputSourceD01.INSUP, Type.INPUT );
         insectPanel.add( lblInInsup, "cell 0 1" );
         lblInInsdown = new InputSourceLabel( "INSDOWN", InputSourceD01.INSDOWN, Type.INPUT );
         insectPanel.add( lblInInsdown, "cell 0 2" );
+        
+        lblInInstall = new InputSourceLabel( "IM", InputSourceD01.IM, Type.INPUT );
+        insectPanel.add( lblInInstall, "cell 1 0" );
+        lblInInstallup = new InputSourceLabel( "IU", InputSourceD01.IU, Type.INPUT );
+        insectPanel.add( lblInInstallup, "cell 1 1" );
+        lblInInstalldown = new InputSourceLabel( "ID", InputSourceD01.ID, Type.INPUT );
+        insectPanel.add( lblInInstalldown, "cell 1 2" );
+        lblInInslimitup = new InputSourceLabel( "ISU", InputSourceD01.ISU, Type.INPUT );
+        insectPanel.add( lblInInslimitup, "cell 1 3" );
+        lblInInslimitdown = new InputSourceLabel( "ISD", InputSourceD01.ISD, Type.INPUT );
+        insectPanel.add( lblInInslimitdown, "cell 1 4" );
         
         /** ****************************** Driver Panel ****************************** */
         lblDriver = new JLabel( TEXT.getString( "IOStatus.TEXT_LABEL_DRIVER" ) );
@@ -521,6 +537,11 @@ public class IOStatusD01 extends JPanel implements Page, LiftDataChangedListener
         tooltipManager.registerToolTip( lblInIns );
         tooltipManager.registerToolTip( lblInInsup );
         tooltipManager.registerToolTip( lblInInsdown );
+        tooltipManager.registerToolTip( lblInInstall );
+        tooltipManager.registerToolTip( lblInInstallup );
+        tooltipManager.registerToolTip( lblInInstalldown );
+        tooltipManager.registerToolTip( lblInInslimitup );
+        tooltipManager.registerToolTip( lblInInslimitdown );
         
         tooltipManager.registerToolTip( lblInFUdz );
         tooltipManager.registerToolTip( lblInFLdz );
@@ -588,6 +609,11 @@ public class IOStatusD01 extends JPanel implements Page, LiftDataChangedListener
         lblInIns.setStatus( inspect.getIns() );
         lblInInsup.setStatus( inspect.getInsup() );
         lblInInsdown.setStatus( inspect.getInsdown() );
+        lblInInstall.setStatus( inspect.getInstall() );
+        lblInInstallup.setStatus( inspect.getInstallup() );
+        lblInInstalldown.setStatus( inspect.getInstalldown() );
+        lblInInslimitup.setStatus( inspect.getInslimitup() );
+        lblInInslimitdown.setStatus( inspect.getInslimitdown() );
     }
 
 
@@ -786,13 +812,14 @@ public class IOStatusD01 extends JPanel implements Page, LiftDataChangedListener
     		InputSourceD01.DBDE, InputSourceD01.DBDF, InputSourceD01.BS1,InputSourceD01.BS2, InputSourceD01.LVCFB,
     		InputSourceD01.LVC1FB, InputSourceD01.UDZ, InputSourceD01.LDZ, InputSourceD01.DRVBM,
     		InputSourceD01.DRVOK, InputSourceD01.DRVENF,OutputPinD01.K1, OutputPinD01.K2, OutputPinD01.BR, 
-    		OutputPinD01.EPB, InputSourceD01.DFC, InputSourceD01.DW,	InputSourceD01.HES, InputSourceD01.CES,
+    		OutputPinD01.EPB, InputSourceD01.DFC, InputSourceD01.DW, InputSourceD01.HES, InputSourceD01.CES,
     		InputSourceD01.RDFC, InputSourceD01.RDW, InputSourceD01.USL, InputSourceD01.LSL, 
-    		InputSourceD01.DCS_USL, InputSourceD01.DCS_LSL, InputSourceD01.INS, 
-    		InputSourceD01.INSUP, InputSourceD01.INSDOWN, InputSourceD01.DCS_FUDZ, InputSourceD01.DCS_FLDZ, InputSourceD01.DCS_RUDZ,
+    		InputSourceD01.DCS_USL, InputSourceD01.DCS_LSL, InputSourceD01.INS, InputSourceD01.INSUP, InputSourceD01.INSDOWN, 
+    		InputSourceD01.DCS_FUDZ, InputSourceD01.DCS_FLDZ, InputSourceD01.DCS_RUDZ,
     		InputSourceD01.DCS_RUDZ, InputSourceD01.DCS_RLDZ, InputSourceD01.DCS_URL, InputSourceD01.DCS_DRL,
     		InputSourceD01.DCS_TSL, InputSourceD01.DCS_LR, InputSourceD01.DCS_FR, InputSourceD01.DCS_AR,
     		InputSourceD01.DCS_TD1, InputSourceD01.DCS_TD2, InputSourceD01.DCS_TD3,
+    		InputSourceD01.IM, InputSourceD01.IU, InputSourceD01.ID, InputSourceD01.ISU, InputSourceD01.ISD,
     		
     		OutputSourceD01.CCF, OutputSourceD01.UR, OutputSourceD01.DR, OutputSourceD01.RR,OutputSourceD01.RR2, OutputSourceD01.LVCR,
     		OutputSourceD01.LVC1R, OutputSourceD01.RBR, OutputSourceD01.DRVEN, OutputSourceD01.DRVFWD, OutputSourceD01.DRVREV,
@@ -891,6 +918,12 @@ public class IOStatusD01 extends JPanel implements Page, LiftDataChangedListener
         ib.setIns( map.get( InputSourceD01.INS ) );
         ib.setInsup( map.get( InputSourceD01.INSUP ) );
         ib.setInsdown( map.get( InputSourceD01.INSDOWN ) );
+        ib.setInstall( map.get( InputSourceD01.IM ) );
+        ib.setInstallup( map.get( InputSourceD01.IU ) );
+        ib.setInstalldown( map.get( InputSourceD01.ID ) );
+        ib.setInslimitup( map.get( InputSourceD01.ISU ) );
+        ib.setInslimitdown( map.get( InputSourceD01.ISD ) );
+        
         SwingUtilities.invokeLater( new Runnable() {
             @Override
             public void run () {
