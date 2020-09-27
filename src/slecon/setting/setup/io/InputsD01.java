@@ -1073,6 +1073,11 @@ public class InputsD01 extends JPanel {
         bean_inputPin.setUcmts2( ( InputPinD01 )cbo_line_ucmts2.getSelectedItem() );
         bean_inputPin.setUcmts3( ( InputPinD01 )cbo_line_ucmts3.getSelectedItem() );
         bean_inputPin.setDlb( ( InputPinD01 )cbo_line_dlb.getSelectedItem() );
+        bean_inputPin.setIm( ( InputPinD01 )cbo_line_insm.getSelectedItem() );
+        bean_inputPin.setIu( ( InputPinD01 )cbo_line_iu.getSelectedItem() );
+        bean_inputPin.setId( ( InputPinD01 )cbo_line_id.getSelectedItem() );
+        bean_inputPin.setIsu( ( InputPinD01 )cbo_line_isu.getSelectedItem() );
+        bean_inputPin.setIsd( ( InputPinD01 )cbo_line_isd.getSelectedItem() );
         
         bean_inputPin.setUslInverted( chk_line_usl.isSelected() );
         bean_inputPin.setLslInverted( chk_line_lsl.isSelected() );
@@ -1104,6 +1109,11 @@ public class InputsD01 extends JPanel {
         bean_inputPin.setUcmts2Inverted( chk_line_ucmts2.isSelected() );
         bean_inputPin.setUcmts3Inverted( chk_line_ucmts3.isSelected() );
         bean_inputPin.setDlbInverted(chk_line_dlb.isSelected());
+        bean_inputPin.setImInverted(chk_line_insm.isSelected());
+        bean_inputPin.setIuInverted(chk_line_iu.isSelected());
+        bean_inputPin.setIdInverted(chk_line_id.isSelected());
+        bean_inputPin.setIsuInverted(chk_line_isu.isSelected());
+        bean_inputPin.setIsdInverted(chk_line_isd.isSelected());
         
         return bean_inputPin;
     }
