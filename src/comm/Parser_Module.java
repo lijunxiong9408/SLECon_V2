@@ -137,6 +137,18 @@ public class Parser_Module {
             }
         }
         
+        
+        public short getFault_sign_keep_timer() {
+        	synchronized ( module ) {
+        		return Endian.getShort(module, 4);
+        	}
+        }
+        
+        public void setFault_sign_keep_timer(short timer) {
+        	synchronized ( module ) {
+        		System.arraycopy(Endian.getShortByteArray(timer), 0, module, OFFSET + 4, 2);
+        	}
+        }
     }
     
     

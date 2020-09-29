@@ -8,16 +8,22 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 
 import net.miginfocom.swing.MigLayout;
+import ocsjava.remote.configuration.Event;
 import slecon.StartUI;
 import slecon.ToolBox;
 import slecon.component.MyComboBox;
 import slecon.component.SettingPanel;
+import slecon.component.ValueTextField;
+import slecon.component.iobar.IOBar;
+import slecon.component.iobardialog.IOEditorDialog;
 import slecon.interfaces.ConvertException;
 import base.cfg.FontFactory;
 
 import comm.constants.DeviceMessage;
+import logic.EventID;
 
 
 
@@ -44,6 +50,12 @@ public class Message extends JPanel {
     private MyComboBox				   cbo_fault_car_message;
     private JLabel                     lbl_fault_hall_message;
     private MyComboBox				   cbo_fault_hall_message;
+    
+    private JLabel                     cpt_fault_sign_keep_timer;
+    private JLabel                     lbl_fault_sign_keep_timer;
+    private ValueTextField 			   fmt_fault_sign_keep_timer;
+    private JLabel                     lbl_io_fault_sign;
+    private IOBar          			   io_fault_sign;
     
 
     public Message () {
@@ -97,11 +109,36 @@ public class Message extends JPanel {
         add( lbl_fault_hall_message, "skip 2, span 1, left, top" );
         add( cbo_fault_hall_message, "span 1, wrap 30, left, top" );
         /* ---------------------------------------------------------------------------- */
+        cpt_fault_sign_keep_timer = new JLabel();
+        lbl_fault_sign_keep_timer = new JLabel();
+        fmt_fault_sign_keep_timer = new ValueTextField();
+        io_fault_sign = new IOBar(true);
         
+        setCaptionStyle( cpt_fault_sign_keep_timer );
+        setComboBoxLabelStyle( lbl_fault_sign_keep_timer );
+        fmt_fault_sign_keep_timer.setColumns( 5 );
+        fmt_fault_sign_keep_timer.setHorizontalAlignment( SwingConstants.RIGHT );
+        fmt_fault_sign_keep_timer.setScope( Long.class, 0L, 120L, true, true );
+        fmt_fault_sign_keep_timer.setEmptyValue( 0L );
+        
+        lbl_io_fault_sign = new JLabel();
+        setComboBoxLabelStyle( lbl_io_fault_sign );
+        lbl_io_fault_sign.setText( EventID.getString( EventID.EVTID_SYSTEM_FAULT_WARNING.eventID, null ) );
+        IOEditorDialog.assignTo( StartUI.getLiftSelector().getSelectedLift(), io_fault_sign, EventID.EVTID_SYSTEM_FAULT_WARNING.eventID );
+        
+        add( cpt_fault_sign_keep_timer, "gapbottom 18-12, span, top" );
+        add( lbl_fault_sign_keep_timer, "skip 2, span 1, left, top" );
+        add( fmt_fault_sign_keep_timer, "span 1, wrap, left, top" );
+        add( lbl_io_fault_sign, "skip 2, span, left, top" );
+        add( io_fault_sign, "skip 2, wrap 30, left, top" );
+        /* ---------------------------------------------------------------------------- */
         bindGroup( "car_message", lbl_car_message, cbo_car_message );
         bindGroup( "hall_message", lbl_hall_message, cbo_hall_message );
         bindGroup( "fault_car_message", lbl_fault_car_message, cbo_fault_car_message );
         bindGroup( "fault_hall_message", lbl_fault_hall_message, cbo_fault_hall_message );
+        /* ---------------------------------------------------------------------------- */
+        bindGroup("system_fault_waring", cpt_fault_sign_keep_timer, lbl_io_fault_sign, io_fault_sign);
+        bindGroup("system_fault_waring_keep_timer", lbl_fault_sign_keep_timer, fmt_fault_sign_keep_timer);
         loadI18N();
         revalidate();
     }
@@ -115,6 +152,9 @@ public class Message extends JPanel {
         cpt_fault_inspection_settings.setText( TEXT.getString( "fault_settings" ) );
         lbl_fault_car_message.setText( TEXT.getString( "fault_car_message" ) );
         lbl_fault_hall_message.setText( TEXT.getString( "fault_hall_message" ) );
+        
+        cpt_fault_sign_keep_timer.setText( TEXT.getString( "system_fault_waring" ) );
+        lbl_fault_sign_keep_timer.setText( TEXT.getString( "system_fault_waring_keep_timer" ) );
     }
 
 
@@ -169,6 +209,15 @@ public class Message extends JPanel {
         return bean_inspectionSettings;
     }
     
+    public FaultWarningSignBean getFaultWarningSignBean() throws ConvertException {
+    	if ( ! fmt_fault_sign_keep_timer.checkValue() )
+            throw new ConvertException();
+    	
+    	FaultWarningSignBean bean_faltWarningSign = new FaultWarningSignBean();
+    	bean_faltWarningSign.setWarning_keep_timer( Short.parseShort(fmt_fault_sign_keep_timer.getValue().toString()) );
+    	bean_faltWarningSign.setWarning_event( io_fault_sign.getEvent() );
+		return bean_faltWarningSign;
+    }
     
     public void setGeneralBean ( GeneralBean bean_inspectionSettings ) {
         this.cbo_car_message.setSelectedItem( bean_inspectionSettings.getCarMessage() );
@@ -181,7 +230,11 @@ public class Message extends JPanel {
         this.cbo_fault_hall_message.setSelectedItem( bean_inspectionSettings.getHallMessage() );
     }
     
-
+    public void setFaultWarningSignBean( FaultWarningSignBean bean_faltWarningSign ) {
+    	this.fmt_fault_sign_keep_timer.setOriginValue( bean_faltWarningSign.getWarning_keep_timer() );
+    	this.io_fault_sign.setEvent( bean_faltWarningSign.getWarning_event() );
+    }
+    
     public void start () {
         started = true;
     }
@@ -253,4 +306,20 @@ public class Message extends JPanel {
         }
     }
     
+    public static class FaultWarningSignBean{
+    	private short warning_keep_timer;
+    	private Event warning_event;
+		public short getWarning_keep_timer() {
+			return warning_keep_timer;
+		}
+		public void setWarning_keep_timer(short warning_keep_timer) {
+			this.warning_keep_timer = warning_keep_timer;
+		}
+		public Event getWarning_event() {
+			return warning_event;
+		}
+		public void setWarning_event(Event warning_event) {
+			this.warning_event = warning_event;
+		}
+    }
 }

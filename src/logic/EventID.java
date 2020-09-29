@@ -77,7 +77,8 @@ public enum EventID {
 	DISABLED_HALL_DOWN_REAR_CALL( 1835, 0x7F, CANBus.HALL, DISABLED, DOWN, CALL ),
 	DOOR_OPEN_BUTTON_DISABLED( 1963, 0, null, DISABLED, null, CONSTANT ),
 	DOOR_CLOSE_BUTTON_DISABLED( 1964, 0, null, DISABLED, null, CONSTANT ),
-	ALL_STATION_PARKING_SWITCH( 1965, 0, null, null, null, CONSTANT );
+	ALL_STATION_PARKING_SWITCH( 1965, 0, null, null, null, CONSTANT ),
+	EVTID_SYSTEM_FAULT_WARNING( 1966, 0, null, null, null, CONSTANT );
 	
 	
     private static final ResourceBundle TEXT = ToolBox.getResourceBundle( "logic.EventID" );
