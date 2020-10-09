@@ -82,6 +82,8 @@ public class AdvancedSetting extends SettingPanel<Advanced> implements Page, Lif
     private boolean IsVerify = false;
     
     private static int update_flag = 0x00;
+    
+    private static boolean first_into  = true;
 
     public AdvancedSetting ( LiftConnectionBean connBean ) {
         super(connBean);
@@ -135,12 +137,14 @@ public class AdvancedSetting extends SettingPanel<Advanced> implements Page, Lif
     @Override
     public void onPause() throws Exception {
         setEnabled(false);
+        first_into  = true;
         MON_MGR.removeEventListener(this);
     }
 
     
     @Override
     public void onStop() throws Exception {
+    	first_into  = true;
         MON_MGR.removeEventListener(this);
     }
 
@@ -180,9 +184,7 @@ public class AdvancedSetting extends SettingPanel<Advanced> implements Page, Lif
         
         if(msg==AgentMessage.STATUS.getCode()) {
         	synchronized (mutex) {
-                setEnabled(false);
                 setHot( 0x01 );
-                setEnabled(true);
             }
         }
         
@@ -203,6 +205,7 @@ public class AdvancedSetting extends SettingPanel<Advanced> implements Page, Lif
     
     @Override
     public void onConnLost() {
+    	first_into = true;
         app.stop();
         setEnabled(true);
     }
@@ -300,25 +303,36 @@ public class AdvancedSetting extends SettingPanel<Advanced> implements Page, Lif
             
             if(solid==null)
                 solid = new Solid(bean_PositionAdjustment, bean_AdvanceDoorOpen, bean_ReLevel, bean_others, bean_brake, bean_temp, bean_status);
-            
-            SwingUtilities.invokeLater( new Runnable() {
-                @Override
-                public void run () {
-                	if((update_flag & 0x02) == 0x02) {
-                		app.setPositionAdjustmentBean( bean_PositionAdjustment );
-                        app.setAdvanceDoorOpenBean( bean_AdvanceDoorOpen );
-                        app.setReLevelBean(bean_ReLevel);
-                        app.setOthersBean(bean_others);
-                        app.setBrakeBean(bean_brake);
-                        app.SetCcfTemperature(bean_temp);
-                        app.setInpectionMode(bean_status);
-                	}
-                    
-                	if((update_flag & 0x01) == 0x01) {
-                		app.setDynamicStatus(bean_status);
-                	}
-                }
-            } );
+            if ( first_into == false ) {
+	            SwingUtilities.invokeLater( new Runnable() {
+	                @Override
+	                public void run () {
+	                	if((update_flag & 0x02) == 0x02) {
+	                		app.setPositionAdjustmentBean( bean_PositionAdjustment );
+	                        app.setAdvanceDoorOpenBean( bean_AdvanceDoorOpen );
+	                        app.setReLevelBean(bean_ReLevel);
+	                        app.setOthersBean(bean_others);
+	                        app.setBrakeBean(bean_brake);
+	                        app.SetCcfTemperature(bean_temp);
+	                        app.setInpectionMode(bean_status);
+	                	}
+	                    
+	                	if((update_flag & 0x01) == 0x01) {
+	                		app.setDynamicStatus(bean_status);
+	                	}
+	                }
+	            } );
+            }else {
+            	first_into = false;
+            	app.setPositionAdjustmentBean( bean_PositionAdjustment );
+                app.setAdvanceDoorOpenBean( bean_AdvanceDoorOpen );
+                app.setReLevelBean(bean_ReLevel);
+                app.setOthersBean(bean_others);
+                app.setBrakeBean(bean_brake);
+                app.SetCcfTemperature(bean_temp);
+                app.setInpectionMode(bean_status);
+        		app.setDynamicStatus(bean_status);
+            }
         } catch (Exception e) {
             logger.catching(Level.FATAL, e);
         }
