@@ -202,7 +202,7 @@ public class EarthQuakeOperationSetting extends SettingPanel<EarthQuakeOperation
         lastestTimeStamp = System.nanoTime();
         
         try {
-            final EventAggregator                         ea           = EventAggregator.toEventAggregator( event.getEvent() );
+            final EventAggregator                         ea           = EventAggregator.toEventAggregator( event.getEvent(), this.connBean );
             final EarthQuakeOperation.GeneralBean    bean_general  = new EarthQuakeOperation.GeneralBean();
             final EarthQuakeOperation.IOSettingsBean bean_io       = new EarthQuakeOperation.IOSettingsBean();
 
@@ -243,7 +243,7 @@ public class EarthQuakeOperationSetting extends SettingPanel<EarthQuakeOperation
         try {
             final EarthQuakeOperation.GeneralBean  bean_general  = app.getGeneralBean();
             final EarthQuakeOperation.IOSettingsBean bean_io     = app.getIOSettingsBean();
-            final EventAggregator                      ea            = EventAggregator.toEventAggregator( event.getEvent() );
+            final EventAggregator                      ea            = EventAggregator.toEventAggregator( event.getEvent(), this.connBean );
 
 
             /* General */
@@ -262,7 +262,7 @@ public class EarthQuakeOperationSetting extends SettingPanel<EarthQuakeOperation
             ea.setEvent( EventID.EQO_LOW_WARE_RESET.eventID, bean_io.getEqo_Low_Ware_Reset_Event() );
             ea.setEvent(EventID.EQO_LIGHT.eventID, bean_io.getEqoLightEvent() );
             /* Update Event with OCS Agent. */
-            event.setEvent( ea.toByteArray() );
+            event.setEvent( ea.toByteArray( this.connBean ) );
             event.setInstalledDevices( ea.getInstalledDevices() );
             event.commit();
             return true;

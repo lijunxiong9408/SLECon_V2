@@ -24,7 +24,7 @@ public class Parser_Module {
     /**
      * The total size of module data.
      */
-    public static final int SIZE = 17015;
+    public static final int SIZE = 17415;
     
     /**
      * Module data.
@@ -51,6 +51,7 @@ public class Parser_Module {
     public final P2O  p2o  = new P2O();
     public final DHO  dho  = new DHO();
     public final EPB  epb  = new EPB();
+    public final NONSTOP nonstop = new NONSTOP();
 
     /**
      * Module parser.
@@ -2859,6 +2860,88 @@ public class Parser_Module {
         public void setDoor_close_timer ( int door_close_timer ) {
             synchronized ( module ) {
                 System.arraycopy( Endian.getIntByteArray( door_close_timer * 1000 ), 0, module, OFFSET + 4, 4 );
+            }
+        }
+    }
+    
+    /**
+     * NonStop Operation
+     */
+    public class NONSTOP{
+    	private static final int OFFSET = 17015;
+    	
+    	public boolean isEnabled () {
+            synchronized ( module ) {
+                return Endian.getBitsValue( module[ OFFSET + 0 ], 0, 0 ) != 0;
+            }
+        }
+
+        public void setEnabled ( boolean enabled ) {
+            synchronized ( module ) {
+                module[ OFFSET + 0 ] = ( byte )Endian.setBitsValue( module[ OFFSET + 0 ], enabled ? 1 : 0, 0, 0 );
+            }
+        }
+        
+    	public boolean isControlModeEnabled () {
+            synchronized ( module ) {
+                return Endian.getBitsValue( module[ OFFSET + 1 ], 0, 0 ) != 0;
+            }
+        }
+
+        public void setControlModeEnabled ( boolean enabled ) {
+            synchronized ( module ) {
+                module[ OFFSET + 1 ] = ( byte )Endian.setBitsValue( module[ OFFSET + 1 ], enabled ? 1 : 0, 0, 0 );
+            }
+        }
+        
+        public byte[] getControlPaneltable () {
+            synchronized ( module ) {
+                byte b[] = new byte[ 128 ];
+                for ( int i = 0; i < 128;  i++ )
+                    b[ i ] = module[ OFFSET + 2 + i ];
+                return b;
+            }
+        }
+
+
+        public void setControlPaneltable ( byte table[] ) {
+            synchronized ( module ) {
+                for ( int i = 0 ; i < 128 ; i++ )
+                	module[ OFFSET + 2 + i ] = table[ i ];
+            }
+        }
+        
+        public byte[] getCarLockStrategytable () {
+            synchronized ( module ) {
+                byte b[] = new byte[ 128 ];
+                for ( int i = 0; i < 128;  i++ )
+                    b[ i ] = module[ OFFSET + 130 + i ];
+                return b;
+            }
+        }
+
+
+        public void setCarLockStrategytable ( byte table[] ) {
+            synchronized ( module ) {
+                for ( int i = 0 ; i < 128 ; i++ )
+                	module[ OFFSET + 130 + i ] = table[ i ];
+            }
+        }
+        
+        public byte[] getHallLockStrategytable () {
+            synchronized ( module ) {
+                byte b[] = new byte[ 128 ];
+                for ( int i = 0; i < 128;  i++ )
+                    b[ i ] = module[ OFFSET + 258 + i ];
+                return b;
+            }
+        }
+
+
+        public void setHallLockStrategytable ( byte table[] ) {
+            synchronized ( module ) {
+                for ( int i = 0 ; i < 128 ; i++ )
+                	module[ OFFSET + 258 + i ] = table[ i ];
             }
         }
     }

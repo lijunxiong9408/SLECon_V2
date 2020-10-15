@@ -225,7 +225,7 @@ public class FireEmergencyReturnOperationSetting extends SettingPanel<FireEmerge
             final FireEmergencyReturnOperation.DcsFanBean     bean_dcsFan     = new FireEmergencyReturnOperation.DcsFanBean();
             final FireEmergencyReturnOperation.DcsLightBean   bean_dcsLight   = new FireEmergencyReturnOperation.DcsLightBean();
             final FireEmergencyReturnOperation.StrategyBean   bean_strategy    = new FireEmergencyReturnOperation.StrategyBean();
-            final EventAggregator                             ea              = EventAggregator.toEventAggregator( event.getEvent() );
+            final EventAggregator                             ea              = EventAggregator.toEventAggregator( event.getEvent(), this.connBean );
             
             
             // Initialize internal data.
@@ -294,7 +294,7 @@ public class FireEmergencyReturnOperationSetting extends SettingPanel<FireEmerge
             final FireEmergencyReturnOperation.DcsFanBean     bean_dcsFan     = app.getDcsFanBean();
             final FireEmergencyReturnOperation.DcsLightBean   bean_dcsLight   = app.getDcsLightBean();
             final FireEmergencyReturnOperation.StrategyBean   bean_strategy    = app.getStrategyBean();
-            final EventAggregator                             ea              = EventAggregator.toEventAggregator( event.getEvent() );
+            final EventAggregator                             ea              = EventAggregator.toEventAggregator( event.getEvent(), this.connBean );
 
             // General
             module.fro.setEnabled( bean_general.getEnabled() );
@@ -331,7 +331,7 @@ public class FireEmergencyReturnOperationSetting extends SettingPanel<FireEmerge
             }
 
             // Update Event with OCS Agent.
-            event.setEvent( ea.toByteArray() );
+            event.setEvent( ea.toByteArray( this.connBean ) );
             event.setInstalledDevices( ea.getInstalledDevices() );
             event.commit();
             module.commit();

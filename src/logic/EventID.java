@@ -6,8 +6,9 @@ import static logic.EventID.Door.FRONT;
 import static logic.EventID.Door.REAR;
 import static logic.EventID.Door.DISABLED;
 import static logic.EventID.Type.CALL;
-import static logic.EventID.Type.CONSTANT;
 import static logic.EventID.Type.LIGHT;
+import static logic.EventID.Type.LOCK;
+import static logic.EventID.Type.CONSTANT;
 
 import java.util.ResourceBundle;
 
@@ -78,8 +79,10 @@ public enum EventID {
 	DOOR_OPEN_BUTTON_DISABLED( 1963, 0, null, DISABLED, null, CONSTANT ),
 	DOOR_CLOSE_BUTTON_DISABLED( 1964, 0, null, DISABLED, null, CONSTANT ),
 	ALL_STATION_PARKING_SWITCH( 1965, 0, null, null, null, CONSTANT ),
-	EVTID_SYSTEM_FAULT_WARNING( 1966, 0, null, null, null, CONSTANT );
-	
+	EVTID_SYSTEM_FAULT_WARNING( 1966, 0, null, null, null, CONSTANT ),
+	NONSTOP_OPERATION_PANEL_SWITCH( 1967, 0, null, null, null, CONSTANT ),
+	NONSTOP_CAR_LOCK( 1968, 0x7F, CANBus.CAR, DISABLED, NONE, LOCK ),
+	NONSTOP_HALL_LOCK( 2096, 0x7F, CANBus.HALL, DISABLED, NONE, LOCK );
 	
     private static final ResourceBundle TEXT = ToolBox.getResourceBundle( "logic.EventID" );
     public final int       eventID;
@@ -102,7 +105,7 @@ public enum EventID {
 
 
 
-    enum Type { CALL, LIGHT, CONSTANT, }
+    enum Type { CALL, LIGHT, LOCK, CONSTANT, }
 
 
 
@@ -331,6 +334,16 @@ public enum EventID {
 
     public static int getHallDownArrivalLightRearID ( int floor ) {
         EventID ent = HALL_DOWN_REAR_LIGHT;
+        return ent.eventID + floor;
+    }
+    
+    public static int getCarLockCallID ( int floor ) {
+        EventID ent = NONSTOP_CAR_LOCK;
+        return ent.eventID + floor;
+    }
+    
+    public static int getHallLockCallID ( int floor ) {
+        EventID ent = NONSTOP_HALL_LOCK;
         return ent.eventID + floor;
     }
 }

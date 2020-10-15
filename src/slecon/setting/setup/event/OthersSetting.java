@@ -213,7 +213,7 @@ public class OthersSetting extends SettingPanel<Others> implements Page, LiftDat
         lastestTimeStamp = System.nanoTime();
         
         try {
-            final EventAggregator ea       = EventAggregator.toEventAggregator( event.getEvent() );
+            final EventAggregator ea       = EventAggregator.toEventAggregator( event.getEvent(), this.connBean );
 
             /* IOSettings */
             final Others.IOSettingsBean bean_iOSettings = new Others.IOSettingsBean();
@@ -255,7 +255,7 @@ public class OthersSetting extends SettingPanel<Others> implements Page, LiftDat
     	if(IsVerify) {
 	        try {
 	            IOSettingsBean bean_iOSettings = app.getIOSettingsBean();
-	            EventAggregator ea       = EventAggregator.toEventAggregator( event.getEvent() );
+	            EventAggregator ea       = EventAggregator.toEventAggregator( event.getEvent(), this.connBean );
 	            
 	            ea.setEvent( EventID.DOOR_OPEN_BUTTON_FRONT.eventID, bean_iOSettings.getOpenFrontDoorEvent() );
 	            ea.setEvent( EventID.DOOR_CLOSE_BUTTON_FRONT.eventID, bean_iOSettings.getCloseFrontDoorEvent() );
@@ -276,7 +276,7 @@ public class OthersSetting extends SettingPanel<Others> implements Page, LiftDat
 	            ea.setEvent( EventID.LIGHT_CUST1.eventID, bean_iOSettings.getLightCust1Event() );
 	            ea.setEvent( EventID.LIGHT_CUST2.eventID, bean_iOSettings.getLightCust2Event() );
 	            
-	            event.setEvent( ea.toByteArray() );
+	            event.setEvent( ea.toByteArray( this.connBean ) );
 	            event.setInstalledDevices( ea.getInstalledDevices() );
 	            event.commit();
 	            return true;

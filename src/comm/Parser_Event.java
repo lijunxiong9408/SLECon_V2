@@ -126,7 +126,7 @@ public class Parser_Event {
         // XXX
         // Catch a debug that all events blemished on a unknown commit. 
         if ( this.installed_devices == null || this.event == null 
-            || this.installed_devices.length <= 0 || this.event.length <= EventAggregator.MAX_EVENT * EventAggregator.PTR_SIZE ) {
+            || this.installed_devices.length <= 0 ) {
             JOptionPane.showMessageDialog( null, "T1", "Error", JOptionPane.ERROR_MESSAGE );
             return;
         }

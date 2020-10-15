@@ -220,7 +220,7 @@ public class FloorSetting extends SettingPanel<Floor> implements Page, LiftDataC
         lastestTimeStamp = System.nanoTime();
         
         try {
-            final EventAggregator ea        = EventAggregator.toEventAggregator( event.getEvent() );
+            final EventAggregator ea        = EventAggregator.toEventAggregator( event.getEvent(), this.connBean );
   
             // TODO pls excluding doorzone  
             final TreeMap<Integer, String> floorMap = new TreeMap<>();
@@ -247,7 +247,7 @@ public class FloorSetting extends SettingPanel<Floor> implements Page, LiftDataC
     	if(IsVerify) {
 	        try {
 	            EventAggregator ea = app.getEventAggregator();
-	            event.setEvent( ea.toByteArray() );
+	            event.setEvent( ea.toByteArray( this.connBean ) );
 	            event.setInstalledDevices( ea.getInstalledDevices() );
 	            event.commit();
 	            return true;

@@ -214,7 +214,7 @@ public class DoorTimingSetting extends SettingPanel<DoorTiming> implements Page,
                 new DoorTiming.DoorHoldButtonBean();
             final DoorTiming.IndependentControlOfCarDoorAndLandingDoorBean bean_independent_control_of_car_door_landing_door =
                 new DoorTiming.IndependentControlOfCarDoorAndLandingDoorBean();
-            final EventAggregator ea = EventAggregator.toEventAggregator( event.getEvent() );
+            final EventAggregator ea = EventAggregator.toEventAggregator( event.getEvent(), this.connBean );
 
             /* General */
             bean_general.setDoorCloseTimer( ( long )module.dcs.getDoor_close_time() );
@@ -307,9 +307,9 @@ public class DoorTimingSetting extends SettingPanel<DoorTiming> implements Page,
             module.dcs.setRear_door_car_calls( bean_independentControlOfCarDoorAndLandingDoor.getRearDoorCarCalls().intValue() );
             module.dcs.setRear_door_hall_calls( bean_independentControlOfCarDoorAndLandingDoor.getRearDoorHallCalls().intValue() );
 
-            final EventAggregator ea = EventAggregator.toEventAggregator( event.getEvent() );
+            final EventAggregator ea = EventAggregator.toEventAggregator( event.getEvent(), this.connBean );
             ea.setEvent( EventID.DOOR_HOLD_BUTTON.eventID, bean_doorHoldButton.getDoorHoldButtonEvent() );
-            event.setEvent( ea.toByteArray() );
+            event.setEvent( ea.toByteArray( this.connBean ) );
             event.setInstalledDevices( ea.getInstalledDevices() );
             event.commit();
             module.commit();

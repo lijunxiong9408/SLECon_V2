@@ -98,6 +98,7 @@ public final class PageLookup {
         setup.add( new DisplayTreeItem( 0x0314, "Modules::Prompt Tone", slecon.setting.modules.PromptToneSetting.class, "read_ocs" ) );
         setup.add( new DisplayTreeItem( 0x0315, "Modules::Energy Saving", slecon.setting.modules.EnergySavingSetting.class, "read_ocs" ) );
         setup.add( new DisplayTreeItem( 0x0316, "Modules::Random Run", slecon.setting.modules.RandomRunSetting.class, "read_ocs" ) );
+        setup.add( new DisplayTreeItem( 0x0317, "Modules::Nonstop Operation", slecon.setting.modules.NonStopOperationSetting.class, "read_ocs" ) );
         setup.add( new DisplayTreeItem( 0x0410, "Management::Utilities", slecon.setting.management.UtilitiesSetting.class, "read_manager" ) );
         setup.add( new DisplayTreeItem( 0x0411, "Management::Security", slecon.setting.notcomplete.T3.class, "debugMode" ) );
         setup.add( new DisplayTreeItem( 0x0412, "Management::Synchronization", slecon.setting.management.SynchronizationSetting.class, "read_manager" ) );

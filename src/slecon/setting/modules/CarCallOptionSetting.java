@@ -209,7 +209,7 @@ public class CarCallOptionSetting extends SettingPanel<CarCallOption> implements
         lastestTimeStamp = System.nanoTime();
         
         try {
-    	    final EventAggregator            ea                  = EventAggregator.toEventAggregator( event.getEvent() );
+    	    final EventAggregator            ea                  = EventAggregator.toEventAggregator( event.getEvent(), this.connBean );
             final CarCallOption.AntiNuisanceCarCallOperationBean bean_antiNuisanceCarCallOperation =
                 new CarCallOption.AntiNuisanceCarCallOperationBean();
             final CarCallOption.CallsInOppositeDirectionAutoClearBean bean_callsInOppositeDirectionAutoClear =
@@ -241,7 +241,7 @@ public class CarCallOptionSetting extends SettingPanel<CarCallOption> implements
             bean_asp.setAspEvent( ea.getEvent( EventID.ALL_STATION_PARKING_SWITCH.eventID ));
             
             bean_p2o.setEnabled(module.p2o.getEnable());
-            String[] floorText = new String[128];
+            String[] floorText = new String[deploy.getFloorCount()];
             for(int i=0; i < deploy.getFloorCount(); i++) {
             	floorText[i] = deploy.getFloorText((byte)i) ;
             }
@@ -288,7 +288,7 @@ public class CarCallOptionSetting extends SettingPanel<CarCallOption> implements
             
             final CarCallOption.Point2OperationBean bean_p2o	  = app.getP2oBean();
             
-            final EventAggregator      ea                  = EventAggregator.toEventAggregator( event.getEvent() );
+            final EventAggregator      ea                  = EventAggregator.toEventAggregator( event.getEvent(), this.connBean );
             
             /* AntiNuisanceCarCallOperation */
             module.cco.setAnti_nuisance_car_call_operation_enabled( bean_antiNuisanceCarCallOperation.getEnabled() );
@@ -312,7 +312,7 @@ public class CarCallOptionSetting extends SettingPanel<CarCallOption> implements
             
             ea.setEvent(EventID.ALL_STATION_PARKING_SWITCH.eventID, bean_asp.getAspEvent());
             // Commit data to XML RPC server.
-            event.setEvent( ea.toByteArray() );
+            event.setEvent( ea.toByteArray( this.connBean ) );
             event.setInstalledDevices( ea.getInstalledDevices() );
             event.commit();
             return true;

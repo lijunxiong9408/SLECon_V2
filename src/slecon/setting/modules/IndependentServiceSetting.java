@@ -208,7 +208,7 @@ public class IndependentServiceSetting extends SettingPanel<IndependentService> 
             final IndependentService.GeneralBean    bean_general    = new IndependentService.GeneralBean();
             final IndependentService.IOSettingsBean bean_iOSettings = new IndependentService.IOSettingsBean();
             final IndependentService.StrategyBean   bean_strategy    = new IndependentService.StrategyBean();
-            final EventAggregator                   ea              = EventAggregator.toEventAggregator( event.getEvent() );
+            final EventAggregator                   ea              = EventAggregator.toEventAggregator( event.getEvent(), this.connBean );
 
             // General
             bean_general.setEnabled( module.isc.isEnabled() );
@@ -246,7 +246,7 @@ public class IndependentServiceSetting extends SettingPanel<IndependentService> 
             final IndependentService.GeneralBean    bean_general    = app.getGeneralBean();
             final IndependentService.IOSettingsBean bean_iOSettings = app.getIOSettingsBean();
             final IndependentService.StrategyBean   bean_strategy   = app.getStrategyBean();
-            final EventAggregator                   ea              = EventAggregator.toEventAggregator( event.getEvent() );
+            final EventAggregator                   ea              = EventAggregator.toEventAggregator( event.getEvent(), this.connBean );
 
             /* General */
             module.isc.setEnabled( bean_general.getEnabled() );
@@ -262,7 +262,7 @@ public class IndependentServiceSetting extends SettingPanel<IndependentService> 
             
             /* IOSettings */
             ea.setEvent( EventID.ISC_FRONT.eventID, bean_iOSettings.getIscSwitchEvent() );
-            event.setEvent( ea.toByteArray() );
+            event.setEvent( ea.toByteArray( this.connBean ) );
             event.setInstalledDevices( ea.getInstalledDevices() );
             event.commit();
             module.commit();

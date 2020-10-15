@@ -75,7 +75,7 @@ public class EnergySaving extends JPanel {
 
     private void initGUI () {
         setBackground( StartUI.SUB_BACKGROUND_COLOR );
-        setLayout( new MigLayout( "fillx, ins 10 25 25 25, gap 0 12", "[30::30][30::30][150::150][150::150][]" ) );        
+        setLayout( new MigLayout( "fillx, ins 10 25 25 25, gap 0 12", "[30::30][30::30][200::200][150::150][]" ) );        
         
         tabPane = new JTabbedPane();
         

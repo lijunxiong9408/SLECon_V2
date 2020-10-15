@@ -139,7 +139,7 @@ public class TopMain extends JPanel {
         lblVersion = new JLabel();
         lblVersion.setHorizontalAlignment( SwingConstants.RIGHT );
         lblVersion.setVerticalAlignment( SwingConstants.CENTER );
-        lblVersion.setText("Version : 2.1.5");
+        lblVersion.setText("Version : 2.1.6");
         
         lblMemoryUsage = new JLabel( "" );
         lblValidity = new JLabel();

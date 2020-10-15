@@ -236,7 +236,7 @@ public class ParkingSetting extends SettingPanel<Parking> implements Page, LiftD
         lastestTimeStamp = System.nanoTime();
         
         try {
-            final EventAggregator            ea                  = EventAggregator.toEventAggregator( event.getEvent() );
+            final EventAggregator            ea                  = EventAggregator.toEventAggregator( event.getEvent(), this.connBean );
             final Parking.GeneralBean        bean_general        = new Parking.GeneralBean();
             final Parking.IOSettingsBean     bean_iOSettings     = new Parking.IOSettingsBean();
             final Parking.DcsFanBean         bean_dcsFan         = new Parking.DcsFanBean();
@@ -316,7 +316,7 @@ public class ParkingSetting extends SettingPanel<Parking> implements Page, LiftD
             Parking.OpenDoorButtonBean bean_openDoorButton = app.getOpenDoorButtonBean();
             Parking.DcsFanBean         bean_dcsFan         = app.getDcsFanBean();
             Parking.DcsLightBean       bean_dcsLight       = app.getDcsLightBean();
-            final EventAggregator      ea                  = EventAggregator.toEventAggregator( event.getEvent() );
+            final EventAggregator      ea                  = EventAggregator.toEventAggregator( event.getEvent(), this.connBean );
 
             /* General */
             module.pak.setEnabled( bean_general.getEnabled() );
@@ -354,11 +354,7 @@ public class ParkingSetting extends SettingPanel<Parking> implements Page, LiftD
             module.pak.setDisable_cabin_light_activation_time( bean_dcsLight.getActivationTimer1().intValue() );
 
             // Update Event with OCS Agent.
-            event.setEvent( ea.toByteArray() );
-            event.setInstalledDevices( ea.getInstalledDevices() );
-
-            // Commit data to XML RPC server.
-            event.setEvent( ea.toByteArray() );
+            event.setEvent( ea.toByteArray( this.connBean ) );
             event.setInstalledDevices( ea.getInstalledDevices() );
             event.commit();
             module.commit();

@@ -69,10 +69,10 @@ public class CabinAndDoorSetting extends SettingPanel<CabinAndDoor> implements P
     private Parser_DoorEnable door_enable;
     private Parser_Status status;
     private Parser_Misc misc;
-    
     private boolean IsVerify = false;
     private static int update_flag = 0x00;
-
+    private static boolean first_into  = true;
+    
     public CabinAndDoorSetting ( LiftConnectionBean connBean ) {
         super(connBean);
         this.connBean = connBean;
@@ -124,6 +124,7 @@ public class CabinAndDoorSetting extends SettingPanel<CabinAndDoor> implements P
     @Override
     public void onPause () throws Exception {
     	setEnabled( false );
+    	first_into = true;
         MON_MGR.removeEventListener( this );
     }
     
@@ -145,6 +146,7 @@ public class CabinAndDoorSetting extends SettingPanel<CabinAndDoor> implements P
     
     @Override
     public void onStop () throws Exception {
+    	first_into = true;
     	MON_MGR.removeEventListener( this );
     }
 
@@ -181,11 +183,9 @@ public class CabinAndDoorSetting extends SettingPanel<CabinAndDoor> implements P
 		
 		if( msg == AgentMessage.STATUS.getCode()) {
 			synchronized (mutex) {
-				setEnabled(false);
 			    if (solid != null ) {
 			        setHot( 0x02 );
 			    }
-			    setEnabled(true);
 			}
 		}
 		
@@ -203,7 +203,7 @@ public class CabinAndDoorSetting extends SettingPanel<CabinAndDoor> implements P
 
 	@Override
 	public void onConnLost() {
-		// TODO Auto-generated method stub
+		first_into = true;
 		app.stop();
         setEnabled( true );
 	}
@@ -213,7 +213,7 @@ public class CabinAndDoorSetting extends SettingPanel<CabinAndDoor> implements P
 			update_flag = flag;
 			
 			lastestTimeStamp = System.nanoTime();
-			String[] floorText = new String[128];
+			String[] floorText = new String[deploy.getFloorCount()];
 			for(byte i=0 ; i < deploy.getFloorCount(); i++) {
 				floorText[ i ] = new String( deploy.getFloorText( i ) );
 			}
@@ -233,21 +233,33 @@ public class CabinAndDoorSetting extends SettingPanel<CabinAndDoor> implements P
 	        
 	        if ( solid == null )
 	            solid = new Solid( bean, load );
-	
-	        // Update returned data to visualization components.
-	        SwingUtilities.invokeLater( new Runnable() {
-	            @Override
-	            public void run () {
-	                app.stop();
-	                if( (update_flag & 0x01) == 0x01 ) {
-	                	app.setDoorEnableBean( bean );
-	                }
-	                if( (update_flag & 0x02) == 0x02 ) {
-	                	app.setLoadWeightData( load );
-	                }
-	                app.start();
-	            }
-	        } );
+	        if( first_into == false ) {
+	        	 // Update returned data to visualization components.
+		        SwingUtilities.invokeLater( new Runnable() {
+		            @Override
+		            public void run () {
+		                app.stop();
+		                if( (update_flag & 0x01) == 0x01 ) {
+		                	app.setDoorEnableBean( bean );
+		                }
+		                if( (update_flag & 0x02) == 0x02 ) {
+		                	app.setLoadWeightData( load );
+		                }
+		                app.start();
+		            }
+		        } );
+	        }else {
+	        	first_into = false;
+	        	app.stop();
+                if( (update_flag & 0x01) == 0x01 ) {
+                	app.setDoorEnableBean( bean );
+                }
+                if( (update_flag & 0x02) == 0x02 ) {
+                	app.setLoadWeightData( load );
+                }
+                app.start();
+	        }
+	       
 		}catch ( Exception e ) {
             logger.catching( Level.FATAL, e );
         }

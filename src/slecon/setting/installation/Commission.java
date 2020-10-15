@@ -230,7 +230,7 @@ public class Commission extends JPanel implements ActionListener, ChangeListener
         cbo_buffer_test.setModel( new DefaultComboBoxModel<RunDirect>(RunDirect.values()) );
         cbo_terminal_test.setModel( new DefaultComboBoxModel<RunDirect>(RunDirect.values()) );
         cbo_ucmp_test.setModel( new DefaultComboBoxModel<UcmpTest>(UcmpTest.values()) );
-        
+        /*
         Box vbox_title3 = Box.createVerticalBox();
         vbox_title3.add( lbl_mcs_reset);
         vbox_title3.add( Box.createVerticalStrut(15));
@@ -245,28 +245,44 @@ public class Commission extends JPanel implements ActionListener, ChangeListener
         vbox_title3.add( lbl_ucmp_test);
         
         Box vbox_value3 = Box.createVerticalBox();
-        vbox_value3.add( Box.createVerticalStrut(80));
+        vbox_value3.add( Box.createVerticalStrut(90));
         vbox_value3.add( btn_mcs_pos_corr );
-        vbox_value3.add( Box.createVerticalStrut(10));
+        vbox_value3.add( Box.createVerticalStrut(15));
         vbox_value3.add( cbo_buffer_test );
-        vbox_value3.add( Box.createVerticalStrut(10));
+        vbox_value3.add( Box.createVerticalStrut(15));
         vbox_value3.add( cbo_terminal_test );
-        vbox_value3.add( Box.createVerticalStrut(10));
+        vbox_value3.add( Box.createVerticalStrut(15));
         vbox_value3.add( cbo_ucmp_test );
         
         Box vbox_oper3 = Box.createVerticalBox();
         vbox_oper3.add( btn_mcs_reset );
         vbox_oper3.add( Box.createVerticalStrut(90));
         vbox_oper3.add( btn_buffer_test );
-        vbox_oper3.add( Box.createVerticalStrut(3));
+        vbox_oper3.add( Box.createVerticalStrut(10));
         vbox_oper3.add( btn_terminal_test );
-        vbox_oper3.add( Box.createVerticalStrut(3));
+        vbox_oper3.add( Box.createVerticalStrut(10));
         vbox_oper3.add( btn_ucmp_test );
-        
+        */
         add( cpt_security_test, "gapbottom 18-12, span, top" );
-        add( vbox_title3, "skip 2, span 1, left, top" );
-        add( vbox_value3, "span 1, left, top" );
-        add( vbox_oper3, "span 1, wrap 30, left, top" );
+        add( lbl_mcs_reset, "skip 2, span 1, left" );
+        add( btn_mcs_reset, "span 1, wrap 10, left, bottom" );
+
+        add( ebd_mcs_independent_mode, "skip 2, span, wrap 10, left" );
+        
+        add( btn_mcs_emer_stop, "skip 2, span 1, left, bottom" );
+        add( btn_mcs_pos_corr, "span 1, wrap 10, left, bottom" );
+        
+        add( lbl_buffer_test, "skip 2, span 1, left" );
+        add( cbo_buffer_test, "span 1, left" );
+        add( btn_buffer_test, "span 1, wrap 10, left, bottom" );
+        
+        add( lbl_terminal_test, "skip 2, span 1, left" );
+        add( cbo_terminal_test, "span 1, left" );
+        add( btn_terminal_test, "span 1, wrap 10, left, bottom" );
+        
+        add( lbl_ucmp_test, "skip 2, span 1, left" );
+        add( cbo_ucmp_test, "span 1, left" );
+        add( btn_ucmp_test, "span 1, wrap 20, left, bottom" );
         
         /*----------------------------------------------------------------------------*/
         bindGroup( "InstallationMode", ebd_installation_mode );

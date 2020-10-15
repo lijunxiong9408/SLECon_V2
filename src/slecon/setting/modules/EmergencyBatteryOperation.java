@@ -81,7 +81,7 @@ public class EmergencyBatteryOperation extends JPanel {
 
     private void initGUI () {
         setBackground( StartUI.SUB_BACKGROUND_COLOR );
-        setLayout( new MigLayout( "fillx, ins 25, gap 0 12", "[30::30][30::30][150::150][150::150][]" ) );
+        setLayout( new MigLayout( "fillx, ins 25, gap 0 12", "[30::30][30::30][200::200][150::150][]" ) );
         cpt_general               = new JLabel();
         ebd_enabled               = new ValueCheckBox();
         lbl_door_close_time 	  = new JLabel();

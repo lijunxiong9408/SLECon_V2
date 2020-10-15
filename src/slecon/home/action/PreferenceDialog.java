@@ -189,7 +189,8 @@ public class PreferenceDialog extends JDialog implements ActionListener {
 	protected enum Language {
         EN( Locale.ENGLISH ),
         ZH_TW( Locale.TAIWAN ),
-        ZH_CN( Locale.CHINA);
+        ZH_CN( Locale.CHINA),
+		JP( Locale.JAPAN );
 
         static HashMap<Locale, Language> map = new HashMap<>();
 
@@ -254,7 +255,8 @@ public class PreferenceDialog extends JDialog implements ActionListener {
         cboUptimeFormat.setModel(new DefaultComboBoxModel<>(new String[] {
                 TEXT.getString("Time_format_en"),
                 TEXT.getString("Time_format_tw"),
-                TEXT.getString("Time_format_cn")
+                TEXT.getString("Time_format_cn"),
+                TEXT.getString("Time_format_en")
         }));
     }
     

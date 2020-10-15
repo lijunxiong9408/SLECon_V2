@@ -220,7 +220,7 @@ public class AttendantServiceOperationSetting extends SettingPanel<AttendantServ
             bean_general.setHallMessage( DeviceMessage.get( module.att.getHall_message() ) );
 
             /* IOSettings */
-            EventAggregator ea = EventAggregator.toEventAggregator( event.getEvent() );
+            EventAggregator ea = EventAggregator.toEventAggregator( event.getEvent(), this.connBean );
             bean_iOSettings.setAttSwitch( ea.getEvent( EventID.ATT_FRONT.eventID ) );
             bean_iOSettings.setUpSwitch( ea.getEvent( EventID.ATT_UP_FRONT.eventID ) );
             bean_iOSettings.setDownSwitch( ea.getEvent( EventID.ATT_DOWN_FRONT.eventID ) );
@@ -258,12 +258,12 @@ public class AttendantServiceOperationSetting extends SettingPanel<AttendantServ
             module.att.setHall_message( bean_general.getHallMessage().getCode() );
 
             /* IOSettings */
-            final EventAggregator ea = EventAggregator.toEventAggregator( event.getEvent() );
+            final EventAggregator ea = EventAggregator.toEventAggregator( event.getEvent(), this.connBean );
             ea.setEvent( EventID.ATT_FRONT.eventID, bean_iOSettings.getAttSwitch() );
             ea.setEvent( EventID.ATT_UP_FRONT.eventID, bean_iOSettings.getUpSwitch() );
             ea.setEvent( EventID.ATT_DOWN_FRONT.eventID, bean_iOSettings.getDownSwitch() );
             ea.setEvent( EventID.ATT_NONSTOP_FRONT.eventID, bean_iOSettings.getNonStopSwitch() );
-            event.setEvent( ea.toByteArray() );
+            event.setEvent( ea.toByteArray( this.connBean ) );
             event.setInstalledDevices( ea.getInstalledDevices() );
             event.commit();
             module.commit();

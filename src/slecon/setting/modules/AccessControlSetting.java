@@ -208,7 +208,7 @@ public class AccessControlSetting extends SettingPanel<AccessControl> implements
         lastestTimeStamp = System.nanoTime();
         
         try {
-            final EventAggregator              ea              = EventAggregator.toEventAggregator( event.getEvent() );
+            final EventAggregator              ea              = EventAggregator.toEventAggregator( event.getEvent(), this.connBean );
             final AccessControl.GeneralBean    bean_general    = new AccessControl.GeneralBean();
             final AccessControl.IOSettingsBean bean_iOSettings = new AccessControl.IOSettingsBean();
 
@@ -237,7 +237,7 @@ public class AccessControlSetting extends SettingPanel<AccessControl> implements
             for ( int i = 0 ; i < 128 ; i++ )
                 ftext[ i ] = deploy.getFloorText( ( byte )i );
             */
-            String[] floorText = new String[128];
+            String[] floorText = new String[deploy.getFloorCount()];
 			for(byte i=0 ; i < deploy.getFloorCount(); i++) {
 				floorText[ i ] = new String( deploy.getFloorText( i ) );
 			}
@@ -267,7 +267,7 @@ public class AccessControlSetting extends SettingPanel<AccessControl> implements
         try {
             final AccessControl.GeneralBean    bean_general    = app.getGeneralBean();
             final AccessControl.IOSettingsBean bean_iOSettings = app.getIOSettingsBean();
-            final EventAggregator              ea              = EventAggregator.toEventAggregator( event.getEvent() );
+            final EventAggregator              ea              = EventAggregator.toEventAggregator( event.getEvent(), this.connBean );
 
             /* General */
             module.acc.setEnabled( bean_general.getEnabled() );
@@ -289,7 +289,7 @@ public class AccessControlSetting extends SettingPanel<AccessControl> implements
             module.acc.setAccess_table( bean_iOSettings.getCallAvailability() );
 
             // Update Event with OCS Agent.
-            event.setEvent( ea.toByteArray() );
+            event.setEvent( ea.toByteArray( this.connBean ) );
             event.setInstalledDevices( ea.getInstalledDevices() );
             event.commit();
             module.commit();

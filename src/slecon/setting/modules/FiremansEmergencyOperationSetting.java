@@ -221,7 +221,7 @@ public class FiremansEmergencyOperationSetting extends SettingPanel<FiremansEmer
             final FiremansEmergencyOperation.GeneralBean    bean_general    = new FiremansEmergencyOperation.GeneralBean();
             final FiremansEmergencyOperation.StrategyBean   bean_strategy   = new FiremansEmergencyOperation.StrategyBean();
             final FiremansEmergencyOperation.IOSettingsBean bean_iOSettings = new FiremansEmergencyOperation.IOSettingsBean();
-            final EventAggregator                           ea              = EventAggregator.toEventAggregator( event.getEvent() );
+            final EventAggregator                           ea              = EventAggregator.toEventAggregator( event.getEvent(), this.connBean );
 
             // Initialize internal data.
             initFloorText();
@@ -267,7 +267,7 @@ public class FiremansEmergencyOperationSetting extends SettingPanel<FiremansEmer
             final FiremansEmergencyOperation.GeneralBean    bean_general    = app.getGeneralBean();
             final FiremansEmergencyOperation.IOSettingsBean bean_iOSettings = app.getIOSettingsBean();
             final FiremansEmergencyOperation.StrategyBean   bean_strategy   = app.getStrategyBean();
-            final EventAggregator                           ea              = EventAggregator.toEventAggregator( event.getEvent() );
+            final EventAggregator                           ea              = EventAggregator.toEventAggregator( event.getEvent(), this.connBean );
 
             // General
             module.feo.setEnabled( bean_general.getEnabled() );
@@ -290,9 +290,7 @@ public class FiremansEmergencyOperationSetting extends SettingPanel<FiremansEmer
             ea.setEvent( EventID.FEO_FRONT.eventID, bean_iOSettings.getFeoSwitchEvent() );
 
             // Update Event with OCS Agent.
-            event.setEvent( ea.toByteArray() );
-            event.setInstalledDevices( ea.getInstalledDevices() );
-            event.setEvent( ea.toByteArray() );
+            event.setEvent( ea.toByteArray( this.connBean ) );
             event.setInstalledDevices( ea.getInstalledDevices() );
             event.commit();
             module.commit();

@@ -195,7 +195,7 @@ public class RandomRunSetting extends SettingPanel<RandomRun> implements Page, L
             bean_general.setDoorEnableAction(module.rdr.getRunStrategy());
             bean_general.setRun_times(module.rdr.getRunTimes());
             
-            String[] floorText = new String[128];
+            String[] floorText = new String[deploy.getFloorCount()];
             for(int i=0; i < deploy.getFloorCount(); i++) {
             	floorText[i] = deploy.getFloorText((byte)i) ;
             }

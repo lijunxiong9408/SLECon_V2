@@ -1086,7 +1086,7 @@ public class IOEditorDialog extends JDialog
             int cur_floor = EventID.getFloor( eventID );
         	int sel_floor = cur_floor + cbo_Select_floor.getSelectedIndex();
         	try {
-        		EventAggregator ea = EventAggregator.toEventAggregator( event.getEvent() );
+        		EventAggregator ea = EventAggregator.toEventAggregator( event.getEvent(), this.connBean );
         		if( input_count > 0 || output_count > 0 ) {
             		event.setUpdateFlag(false);
             		for(int i = 0; i <= (sel_floor - cur_floor); i++) {
@@ -1121,7 +1121,7 @@ public class IOEditorDialog extends JDialog
             				break;
             			}
             		}        
-            		event.setEvent( ea.toByteArray() );
+            		event.setEvent( ea.toByteArray( this.connBean ) );
             		event.setInstalledDevices( ea.getInstalledDevices() );
             		event.commit();
             		event.setUpdateFlag(true);
@@ -1133,7 +1133,7 @@ public class IOEditorDialog extends JDialog
 	            			event.setOperator(Operator.NON);
 	        				ea.setEvent( eventID + i , event );
 	            		}
-	            		event.setEvent( ea.toByteArray() );
+	            		event.setEvent( ea.toByteArray( this.connBean ) );
 	            		event.setInstalledDevices( ea.getInstalledDevices() );
 	            		event.commit();
 	            		event.setUpdateFlag(true);
@@ -1294,7 +1294,7 @@ public class IOEditorDialog extends JDialog
             if (SiteManagement.isAlive(connBean)) {
                 updateDevice();
                 updateFloor();
-                updateItem();
+                updateItem(connBean);
             } else {
                 setDeviceTable(null);
                 setQuery(new QueryEventsFromItem());   // bitList.updateUI(); [swing]
@@ -1343,27 +1343,30 @@ public class IOEditorDialog extends JDialog
             refresh();
         }
         
-        public void updateItem() {
+        public void updateItem( LiftConnectionBean connBean ) {
             final QueryEventsFromItem query = new QueryEventsFromItem();
-            try {
-                EventAggregator ea = EventAggregator.toEventAggregator(event.getEvent());
-                Event[] events = ea.getEventList();
-                for (int id = 0, len = events.length; id < len; id++) {
-                    Event event;
-                    if (( event = events[id] ) == null)
-                        continue;
-                    for (int j = 0, inputCount = event.getInputCount(); j < inputCount; j++) {
-                        Item itm = event.getInput(j);
-                        query.add(itm, id);
-                    }
-                    for (int j = 0, outputCount = event.getOutputCount(); j < outputCount; j++) {
-                        Item itm = event.getOutput(j);
-                        query.add(itm, id);
-                    }
-                }
-            } catch (DataFormatException e) {
-                e.printStackTrace();
-            }
+            EventAggregator ea;
+			try {
+				ea = EventAggregator.toEventAggregator(event.getEvent(), connBean);
+				Event[] events = ea.getEventList();
+	            for (int id = 0, len = events.length; id < len; id++) {
+	                Event event;
+	                if (( event = events[id] ) == null)
+	                    continue;
+	                for (int j = 0, inputCount = event.getInputCount(); j < inputCount; j++) {
+	                    Item itm = event.getInput(j);
+	                    query.add(itm, id);
+	                }
+	                for (int j = 0, outputCount = event.getOutputCount(); j < outputCount; j++) {
+	                    Item itm = event.getOutput(j);
+	                    query.add(itm, id);
+	                }
+	            }
+			} catch (DataFormatException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+            
             SwingUtilities.invokeLater(new Runnable() {
                 @Override
                 public void run() {

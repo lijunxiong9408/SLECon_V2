@@ -240,7 +240,7 @@ public class FloorTextAndMappingSetting extends SettingPanel<FloorTextAndMapping
             }
             deploy.commit();
             
-            EventAggregator ea = EventAggregator.toEventAggregator( event.getEvent() );
+            EventAggregator ea = EventAggregator.toEventAggregator( event.getEvent(), this.connBean );
             for(int i = floor_count; i < 128; i++ ) {
             	if( ea.getEvent(EventID.getCarCallFrontID(i)) != null )
             		ea.setEvent( EventID.getCarCallFrontID(i), null );
@@ -287,7 +287,7 @@ public class FloorTextAndMappingSetting extends SettingPanel<FloorTextAndMapping
             	if( ea.getEvent(EventID.getHallDownArrivalLightRearID(i)) != null )
             		ea.setEvent( EventID.getHallDownArrivalLightRearID( i ), null );
             }
-            event.setEvent( ea.toByteArray() );
+            event.setEvent( ea.toByteArray( this.connBean ) );
             event.setInstalledDevices( ea.getInstalledDevices() );
             event.commit();
             

@@ -1169,8 +1169,8 @@ public class LiftStatusView extends JPanel implements ActionListener, Page, Lift
     
     
     private final List<ErrorLog> logs = new ArrayList<>();
-
-
+    
+    
     public void setErrorLogs ( List<ErrorLog> logs ) {
         List<Integer> codeLogPanel = new ArrayList<>();
         List<Integer> codeNewLog = new ArrayList<>();

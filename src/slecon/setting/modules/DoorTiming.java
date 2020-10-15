@@ -104,7 +104,7 @@ public class DoorTiming extends JPanel {
 
     private void initGUI () {
         setBackground( StartUI.SUB_BACKGROUND_COLOR );
-        setLayout( new MigLayout( "fillx, ins 25, gap 0 12", "[30::30][30::30][150::150][150::150][]" ) );
+        setLayout( new MigLayout( "fillx, ins 25, gap 0 12", "[30::30][30::30][200::200][150::150][]" ) );
         cpt_general          = new JLabel();
         lbl_door_close_timer = new JLabel();
         fmt_door_close_timer = new ValueTextField();
@@ -282,8 +282,8 @@ public class DoorTiming extends JPanel {
         
         add( lbl_holding_time, "skip 2, span 1, left, top" );
         add( fmt_holding_time, "span 1, left, wrap, top" );
-        add( lbl_io_door_holding_button, "skip 2, span 1, left, top" );
-        add( io_door_hold_button, "span 1, left, wrap 30, top" );
+        add( lbl_io_door_holding_button, "skip 2, span, left, top" );
+        add( io_door_hold_button, "skip 2, span, left, wrap 30, top" );
 
         /* ---------------------------------------------------------------------------- */
         cpt_independent_control_of_car_door_and_landing_door = new JLabel();

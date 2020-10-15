@@ -206,7 +206,7 @@ public class MessageSetting extends SettingPanel<Message> implements Page, LiftD
             final Message.GeneralBean bean_general = new Message.GeneralBean();
             final Message.FaultInspectionSettingsBean bean_fault = new Message.FaultInspectionSettingsBean();
             final Message.FaultWarningSignBean bean_fault_sign = new Message.FaultWarningSignBean();
-            final EventAggregator ea = EventAggregator.toEventAggregator( event.getEvent() );
+            final EventAggregator ea = EventAggregator.toEventAggregator( event.getEvent(), this.connBean );
             
             /* General. */
             bean_general.setCarMessage( DeviceMessage.get( module.insp.getCar_message() ) );
@@ -254,9 +254,9 @@ public class MessageSetting extends SettingPanel<Message> implements Page, LiftD
             module.insp.setFault_Hall_message( bean_fault.getHallMessage().getCode() );
             
             module.insp.setFault_sign_keep_timer( bean_fault_sign.getWarning_keep_timer() );
-            final EventAggregator ea = EventAggregator.toEventAggregator( event.getEvent() );
+            final EventAggregator ea = EventAggregator.toEventAggregator( event.getEvent(), this.connBean );
             ea.setEvent( EventID.EVTID_SYSTEM_FAULT_WARNING.eventID, bean_fault_sign.getWarning_event() );
-            event.setEvent( ea.toByteArray() );
+            event.setEvent( ea.toByteArray( this.connBean ) );
             event.setInstalledDevices( ea.getInstalledDevices() );
             event.commit();
             module.commit();

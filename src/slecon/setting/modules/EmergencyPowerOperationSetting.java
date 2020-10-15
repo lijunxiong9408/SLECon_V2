@@ -217,7 +217,7 @@ public class EmergencyPowerOperationSetting extends SettingPanel<EmergencyPowerO
         lastestTimeStamp = System.nanoTime();
         
         try {
-            final EventAggregator                         ea           = EventAggregator.toEventAggregator( event.getEvent() );
+            final EventAggregator                         ea           = EventAggregator.toEventAggregator( event.getEvent(), this.connBean );
             final EmergencyPowerOperation.GeneralBean    bean_general  = new EmergencyPowerOperation.GeneralBean();
             final EmergencyPowerOperation.IOSettingsBean bean_io       = new EmergencyPowerOperation.IOSettingsBean();
             final EmergencyPowerOperation.StrategyBean   bean_strategy = new EmergencyPowerOperation.StrategyBean();
@@ -263,7 +263,7 @@ public class EmergencyPowerOperationSetting extends SettingPanel<EmergencyPowerO
             final EmergencyPowerOperation.GeneralBean  bean_general  = app.getGeneralBean();
             final EmergencyPowerOperation.IOSettingsBean bean_io     = app.getIOSettingsBean();
             final EmergencyPowerOperation.StrategyBean bean_strategy = app.getStrategyBean();
-            final EventAggregator                      ea            = EventAggregator.toEventAggregator( event.getEvent() );
+            final EventAggregator                      ea            = EventAggregator.toEventAggregator( event.getEvent(), this.connBean );
 
 
             /* General */
@@ -281,7 +281,7 @@ public class EmergencyPowerOperationSetting extends SettingPanel<EmergencyPowerO
             module.commit();
 
             /* Update Event with OCS Agent. */
-            event.setEvent( ea.toByteArray() );
+            event.setEvent( ea.toByteArray( this.connBean ) );
             event.setInstalledDevices( ea.getInstalledDevices() );
             event.commit();
             return true;
