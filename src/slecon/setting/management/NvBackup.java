@@ -20,10 +20,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.filechooser.FileNameExtensionFilter;
-
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPReply;
-
 import net.miginfocom.swing.MigLayout;
 import slecon.StartUI;
 import slecon.ToolBox;

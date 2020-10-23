@@ -1,65 +1,37 @@
 package slecon;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Polygon;
 import java.awt.RenderingHints;
-import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowFocusListener;
-import java.awt.geom.Rectangle2D;
-import java.net.InetAddress;
 import java.net.URL;
 import java.net.URLConnection;
-import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.ListIterator;
 import java.util.Properties;
 import java.util.ResourceBundle;
-
-import javax.swing.AbstractAction;
-import javax.swing.Action;
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.KeyStroke;
 import javax.swing.Painter;
 import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
 import javax.swing.Timer;
-import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
-
 import logic.Dict;
-import logic.connection.LiftConnectionBean;
-import logic.util.SiteManagement;
 import net.miginfocom.swing.MigLayout;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import slecon.component.IPanelBinder;
 import slecon.home.HomePanel;
 import slecon.home.PosButton;
