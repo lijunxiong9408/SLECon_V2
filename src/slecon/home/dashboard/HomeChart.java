@@ -144,7 +144,7 @@ public class HomeChart extends JPanel implements ActionListener {
                             continue;
                         }
 
-                        long ts = startTs + 180 * x;
+                        long ts = startTs + 50 * x;
                         for ( ; cur < dataset.size() ; cur++ ) {
                             if ( dataset.get( cur ).ts >= ts )
                                 break;
@@ -209,7 +209,7 @@ public class HomeChart extends JPanel implements ActionListener {
         synchronized ( dataset ) {
             dataset.addLast( new DataPoint( ts, data ) );
             for ( int i = 0 ; i < dataset.size() ; i++ )
-                if ( dataset.get( i ).ts < ts - 78000 ) {
+                if ( dataset.get( i ).ts < ts - 36000 ) {
                     dataset.remove( i );
                     i -= 1;
                 }

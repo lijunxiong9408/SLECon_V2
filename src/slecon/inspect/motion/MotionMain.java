@@ -59,6 +59,9 @@ public class MotionMain extends JPanel implements Page, LiftDataChangedListener 
     private PosButton         btnStart;
     private MigLayout         layout;
     
+    private int speed_index = 0;
+    private float [] speed_avg = new float[10];
+    
     private Parser_McsConfig  mcsconfig;
     private Parser_Status     status;
     private Parser_Deploy     deploy;
@@ -363,14 +366,29 @@ public class MotionMain extends JPanel implements Page, LiftDataChangedListener 
 
 
     public void setHot() {
+    	float temp_speed = 0;
         /*chart*/
         final float mmratio       = mcsconfig.getMMRatio();
         final float contractSpeed = mcsconfig.getContractSpeed();
         final float highestFloor = mcsconfig.getUpper( ( byte )( deploy.getFloorCount() - 1 ) ) * mmratio;
         final long chartTime = status.getTime();
         final float chartPosition = status.getPositionCount() * mmratio;
-        final float chartVelocity = Math.abs( status.getSpeed()  * mmratio);
 
+        if( speed_index >= speed_avg.length ) {
+        	for( int i = 1; i < speed_avg.length; i++ ) {
+        		speed_avg[ i - 1 ] =  speed_avg[ i ];       		
+        	}
+        }else
+        	speed_index++;
+        
+        speed_avg[ speed_index - 1 ] = Math.abs( status.getSpeed()  * mmratio);
+        
+        for( float temp : speed_avg ) {
+        	temp_speed += temp;  		
+    	}
+
+        final float chartVelocity = temp_speed / speed_index;
+        
         /* realtime panel */
         String accelearation = "-";
         String position = "-";

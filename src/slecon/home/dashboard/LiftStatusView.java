@@ -189,6 +189,10 @@ public class LiftStatusView extends JPanel implements ActionListener, Page, Lift
     private Parser_Error                error;
     Parser_Misc                         misc;
     private Parser_DoorEnable           doorEnable;
+    
+    private int speed_index = 0;
+    private float [] speed_avg = new float[10];
+    
     /**
      * Create the panel.
      */
@@ -1134,13 +1138,28 @@ public class LiftStatusView extends JPanel implements ActionListener, Page, Lift
     }
 
     private void updateMotionChartPanel () {
+    	float temp_speed = 0;
         final float mmratio = mcsconfig.getMMRatio();
         final float contractSpeed = mcsconfig.getContractSpeed();
         final float highestFloor = mcsconfig.getUpper( ( byte )( deploy.getFloorCount() - 1 ) ) * mmratio;
         final long chartTime = status.getTime();
         final float chartPosition = status.getPositionCount() * mmratio;
-        final float chartVelocity = Math.abs( status.getSpeed() * mmratio );
 
+        if( speed_index >= speed_avg.length ) {
+        	for( int i = 1; i < speed_avg.length; i++ ) {
+        		speed_avg[ i - 1 ] =  speed_avg[ i ];       		
+        	}
+        }else
+        	speed_index++;
+        
+        speed_avg[ speed_index - 1 ] = Math.abs( status.getSpeed()  * mmratio);
+        
+        for( float temp : speed_avg ) {
+        	temp_speed += temp;  		
+    	}
+
+        final float chartVelocity = temp_speed / speed_index;
+        
         SwingUtilities.invokeLater( new Runnable() {
             @Override
             public void run () {

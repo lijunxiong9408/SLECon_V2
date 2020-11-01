@@ -69,7 +69,9 @@ public class DoorTiming extends JPanel {
     private ValueTextField fmt_activation_timer;
     private JLabel         lbl_retry_count;
     private ValueTextField fmt_retry_count;
-
+    private JLabel		   lbl_change_station_retry_count;
+    private ValueTextField fmt_change_station_retry_count;
+    
     /* ---------------------------------------------------------------------------- */
     private JLabel         cpt_door_hold_button;
     private ValueCheckBox  ebd_enabled;
@@ -226,6 +228,9 @@ public class DoorTiming extends JPanel {
         fmt_activation_timer  = new ValueTextField();
         lbl_retry_count       = new JLabel();
         fmt_retry_count       = new ValueTextField();
+        lbl_change_station_retry_count = new JLabel();
+        fmt_change_station_retry_count = new ValueTextField();
+        
         setCaptionStyle( cpt_safety_chain_fail );
 
         // @CompoentSetting<Fmt>( lbl_checking_timer_on_door_closed_failed , fmt_checking_timer_on_door_closed_failed )
@@ -241,16 +246,27 @@ public class DoorTiming extends JPanel {
         fmt_retry_count.setHorizontalAlignment( SwingConstants.RIGHT );
         fmt_retry_count.setScope( Long.class, 0L, null, true, false );
         fmt_retry_count.setEmptyValue( 1L );
+        
+        setTextLabelStyle( lbl_change_station_retry_count );
+        fmt_change_station_retry_count.setColumns( 10 );
+        fmt_change_station_retry_count.setHorizontalAlignment( SwingConstants.RIGHT );
+        fmt_change_station_retry_count.setScope( Long.class, 0L, null, true, false );
+        fmt_change_station_retry_count.setEmptyValue( 1L );
+        
         add( cpt_safety_chain_fail, "gapbottom 18-12, span, aligny center, top" );
         Box vbox_title2 = Box.createVerticalBox();
         vbox_title2.add( lbl_activation_time);
         vbox_title2.add( Box.createVerticalStrut(15));
         vbox_title2.add( lbl_retry_count);
+        vbox_title2.add( Box.createVerticalStrut(15));
+        vbox_title2.add( lbl_change_station_retry_count);
         
         Box vbox_value2 = Box.createVerticalBox();
         vbox_value2.add( fmt_activation_timer );
         vbox_value2.add( Box.createVerticalStrut(13));
         vbox_value2.add( fmt_retry_count );
+        vbox_value2.add( Box.createVerticalStrut(13));
+        vbox_value2.add( fmt_change_station_retry_count );
         add(vbox_title2, "skip 2, span 1, left, top");
         add(vbox_value2, "span 1, wrap 30, left, top");
 
@@ -361,6 +377,7 @@ public class DoorTiming extends JPanel {
         bindGroup( "door_forced_closed_timeout", lbl_door_forced_closed_timeout, fmt_door_forced_closed_timeout );
         bindGroup( "activation_time", lbl_activation_time, fmt_activation_timer );
         bindGroup( "retry_count", lbl_retry_count, fmt_retry_count );
+        bindGroup( "change_station_retry_count", lbl_change_station_retry_count, fmt_change_station_retry_count );
         bindGroup( "door_hold_button_enabled", ebd_enabled );
         bindGroup( "holding_time", lbl_holding_time, fmt_holding_time );
         bindGroup( "independent_control_of_car_door_and_landing_door_enabled", ebd_enabled_0 );
@@ -396,7 +413,8 @@ public class DoorTiming extends JPanel {
         cpt_safety_chain_fail.setText( TEXT.getString( "safety_chain_fail" ) );
         lbl_activation_time.setText( TEXT.getString( "activation_time" ) );
         lbl_retry_count.setText( TEXT.getString( "retry_count" ) );
-
+        lbl_change_station_retry_count.setText( TEXT.getString( "change_station_retry_count" ) );
+        
         /* ---------------------------------------------------------------------------- */
         cpt_door_hold_button.setText( TEXT.getString( "door_hold_button" ) );
         ebd_enabled.setText( TEXT.getString( "door_hold_button_enabled" ) );
@@ -529,10 +547,13 @@ public class DoorTiming extends JPanel {
             throw new ConvertException();
         if ( ! fmt_retry_count.checkValue() )
             throw new ConvertException();
+        if ( ! fmt_change_station_retry_count.checkValue() )
+            throw new ConvertException();
 
         SafetyChainFailBean bean_doorCloseFailureRecovery = new SafetyChainFailBean();
         bean_doorCloseFailureRecovery.setActivationTime( ( Long )fmt_activation_timer.getValue() );
         bean_doorCloseFailureRecovery.setRetryCount( ( Long )fmt_retry_count.getValue() );
+        bean_doorCloseFailureRecovery.setChangeStationRetryCount( (Long)fmt_change_station_retry_count.getValue() );
         return bean_doorCloseFailureRecovery;
     }
 
@@ -590,6 +611,7 @@ public class DoorTiming extends JPanel {
     public void setSafetyChainFailBean ( SafetyChainFailBean bean_safetyChainFailBean ) {
         this.fmt_activation_timer.setOriginValue( bean_safetyChainFailBean.getActivationTime() );
         this.fmt_retry_count.setOriginValue( bean_safetyChainFailBean.getRetryCount() );
+        this.fmt_change_station_retry_count.setOriginValue( bean_safetyChainFailBean.getChangeStationRetryCount() );
     }
 
 
@@ -777,8 +799,7 @@ public class DoorTiming extends JPanel {
     public static class SafetyChainFailBean {
         private Long activationTime;
         private Long retryCount;
-
-
+        private Long changeStationRetryCount;
 
 
         public Long getActivationTime () {
@@ -799,6 +820,17 @@ public class DoorTiming extends JPanel {
         public void setRetryCount ( Long retryCount ) {
             this.retryCount = retryCount;
         }
+
+
+		public Long getChangeStationRetryCount() {
+			return changeStationRetryCount;
+		}
+
+
+		public void setChangeStationRetryCount(Long changeStationRetryCount) {
+			this.changeStationRetryCount = changeStationRetryCount;
+		}
+        
     }
 
 

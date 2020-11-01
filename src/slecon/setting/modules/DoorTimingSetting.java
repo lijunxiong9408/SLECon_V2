@@ -232,6 +232,7 @@ public class DoorTimingSetting extends SettingPanel<DoorTiming> implements Page,
             /* Safety Chain Fail. */
             bean_door_close_failure_recovery.setActivationTime( ( long )module.dcs.getActivation_time() );
             bean_door_close_failure_recovery.setRetryCount( ( long )module.dcs.getRetry_count() );
+            bean_door_close_failure_recovery.setChangeStationRetryCount( (long)module.dcs.getChange_Station_Retry_count() );
 
             /* Door Hold Button. */
             bean_door_hold_button.setEnabled( module.dcs.isDoor_hold_button_enabled() );
@@ -294,6 +295,7 @@ public class DoorTimingSetting extends SettingPanel<DoorTiming> implements Page,
             /* Safety Chain Fail. */
             module.dcs.setActivation_time( bean_safetychainbean.getActivationTime().intValue() );
             module.dcs.setRetry_count( bean_safetychainbean.getRetryCount().intValue() );
+            module.dcs.setChange_Station_Retry_count( bean_safetychainbean.getChangeStationRetryCount().intValue() );
 
             /* Door Hold Button. */
             module.dcs.setDoor_hold_button_enabled( bean_doorHoldButton.getEnabled() );

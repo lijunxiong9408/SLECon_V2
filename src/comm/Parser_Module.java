@@ -1952,6 +1952,18 @@ public class Parser_Module {
             }
         }
         
+        public int getChange_Station_Retry_count () {
+            synchronized ( module ) {
+                return module[ OFFSET + 62 ];
+            }
+        }
+
+
+        public void setChange_Station_Retry_count ( int retry_count ) {
+            synchronized ( module ) {
+                module[ OFFSET + 62 ] = ( byte )retry_count;
+            }
+        }
     }
     
     /**

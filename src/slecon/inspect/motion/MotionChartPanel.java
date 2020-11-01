@@ -48,7 +48,7 @@ public class MotionChartPanel extends ChartPanel {
      * The timestamp as filter to discard old records.
      */
     private long timestamp = 0;
-
+    
     /**
      * The speed data.
      */
@@ -122,8 +122,6 @@ public class MotionChartPanel extends ChartPanel {
                     dataset2.advanceTime();
                     dataset1.appendData( new float[]{ prevPosition } );
                     dataset2.appendData( new float[]{ prevSpeed } );
-
-                    long elapsedTime = System.currentTimeMillis() - time;
                 }
 
 //              else {
