@@ -560,7 +560,10 @@ public class Floor extends JPanel {
 
         String[] floor = new String[floorMap.size()];
         for ( Integer i : floorMap.keySet() ) {
-        	floor[i] = floorMap.get(i);
+        	if(floorMap.get(i).equals(floorMap.get(i + 1))) {
+        		floor[i] = floorMap.get(i)+""+i;
+        	}else
+        		floor[i] = floorMap.get(i);
         }
         
         cbo_Select_floor.setModel(new DefaultComboBoxModel<>(floor));

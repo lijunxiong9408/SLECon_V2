@@ -262,6 +262,7 @@ public class NonStopOperation extends JPanel {
 			}
 		});
         
+        bindGroup("controlMode", cpt_controlMode, ebd_controlMode);
         bindGroup(new AbstractButton[]{ ebd_enable }, ebd_controlMode, io_controlpanel_switch, control_panle_table,
         		cbo_Select_floor, io_car_lock, cbo_car_lock_strategy, io_hall_lock, cbo_hall_lock_strategy);
         
