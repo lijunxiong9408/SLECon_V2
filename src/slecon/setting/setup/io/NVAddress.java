@@ -116,7 +116,7 @@ public enum NVAddress {
     NVADDR_IN_DRVENF_BITPOS( (short) 0x1896, NVAddress.UC), 
     NVADDR_IN_LRL_BITPOS( (short) 0x1897, NVAddress.UC), 
     NVADDR_IN_URL_BITPOS( (short) 0x1898, NVAddress.UC), 
-    NVADDR_IN_ANO1FB_BITPOS( (short) 0x1899, NVAddress.UC),
+    NVADDR_IN_DLB_BITPOS( (short) 0x1899, NVAddress.UC),
     NVADDR_IN_EPB_BITPOS( (short) 0x189a, NVAddress.UC),
     NVADDR_IN_BS1_BITPOS( (short) 0x189b, NVAddress.UC), 
     NVADDR_IN_BS2_BITPOS( (short) 0x189c, NVAddress.UC), 

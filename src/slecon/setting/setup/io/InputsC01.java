@@ -200,6 +200,11 @@ public class InputsC01 extends JPanel {
     private MyCheckBox                     chk_line_ucmts3;
     private JLabel                        state_line_ucmts3;
     
+    private JLabel                        lbl_line_dlb;
+    private MyComboBox        		      cbo_line_dlb;
+    private MyCheckBox                    chk_line_dlb;
+    private JLabel                        state_line_dlb;
+    
     private HashMap<InputPinC01, Boolean> inputPinState;
     
 
@@ -245,6 +250,7 @@ public class InputsC01 extends JPanel {
     	this.cbo_line_ucmts.setEnabled(Enable);
     	this.cbo_line_ucmts2.setEnabled(Enable);
     	this.cbo_line_ucmts3.setEnabled(Enable);
+    	this.cbo_line_dlb.setEnabled(Enable);
     }
     
     private void initGUI () {
@@ -401,7 +407,11 @@ public class InputsC01 extends JPanel {
         cbo_line_ucmts3.setModel( new DefaultComboBoxModel<>( InputPinC01.allDisplayItem() ) );
         chk_line_ucmts3   = new MyCheckBox();
         state_line_ucmts3 = new JLabel( GRAY_ICON );
-        
+        lbl_line_dlb  = new JLabel();
+        cbo_line_dlb  = new MyComboBox();
+        cbo_line_dlb.setModel( new DefaultComboBoxModel<>( InputPinC01.allDisplayItem() ) );
+        chk_line_dlb   = new MyCheckBox();
+        state_line_dlb = new JLabel( GRAY_ICON );
         SetJComboBoxEnable(false);
         
         setCaptionStyle( cpt_main_inputs );
@@ -499,6 +509,9 @@ public class InputsC01 extends JPanel {
         setLabelTitleStyle( lbl_line_ucmts3 );
         setComboBoxValueStyle( cbo_line_ucmts3 );
         setCheckBoxStyle( chk_line_ucmts3 );
+        setLabelTitleStyle( lbl_line_dlb );
+        setComboBoxValueStyle( cbo_line_dlb );
+        setCheckBoxStyle( chk_line_dlb );
         
         add( cpt_main_inputs, "gapbottom 18-12, span, aligny center" );
         add( lbl_title1, "cell 2 1" );
@@ -620,6 +633,10 @@ public class InputsC01 extends JPanel {
         add( cbo_line_ucmts3, "cell 3 29" );
         add( chk_line_ucmts3, "center, cell 4 29" );
         add( state_line_ucmts3, "center, cell 5 29" );
+        add( lbl_line_dlb, "cell 2 30" );
+        add( cbo_line_dlb, "cell 3 30" );
+        add( chk_line_dlb, "center, cell 4 30" );
+        add( state_line_dlb, "center, cell 5 30" );
 
         ItemChangedListener icl = new ItemChangedListener();
         cbo_line_usl.addItemListener( icl );
@@ -650,6 +667,7 @@ public class InputsC01 extends JPanel {
         cbo_line_ucmts.addItemListener(icl);
         cbo_line_ucmts2.addItemListener(icl);
         cbo_line_ucmts3.addItemListener(icl);
+        cbo_line_dlb.addItemListener(icl);
         
         chk_line_usl.addActionListener( icl );
         chk_line_lsl.addActionListener( icl );
@@ -679,6 +697,7 @@ public class InputsC01 extends JPanel {
         chk_line_ucmts.addActionListener( icl );
         chk_line_ucmts2.addActionListener( icl );
         chk_line_ucmts3.addActionListener( icl );
+        chk_line_dlb.addActionListener( icl );
 
         /**
          * for(int i=0; i<list.size(); i++) { println
@@ -713,6 +732,7 @@ public class InputsC01 extends JPanel {
         bindGroup( "UCMTS", lbl_line_ucmts, cbo_line_ucmts, chk_line_ucmts, state_line_ucmts );
         bindGroup( "UCMTS2", lbl_line_ucmts2, cbo_line_ucmts2, chk_line_ucmts2, state_line_ucmts2 );
         bindGroup( "UCMTS3", lbl_line_ucmts3, cbo_line_ucmts3, chk_line_ucmts3, state_line_ucmts3 );
+        bindGroup( "DLB", lbl_line_dlb, cbo_line_dlb, chk_line_dlb, state_line_dlb );
         
         loadI18N();
         revalidate();
@@ -759,6 +779,7 @@ public class InputsC01 extends JPanel {
         lbl_line_ucmts.setText( "UCMTS" );
         lbl_line_ucmts2.setText( "UCMTS2" );
         lbl_line_ucmts3.setText( "UCMTS3" );
+        lbl_line_dlb.setText("DLB");
         
     }
 
@@ -894,6 +915,7 @@ public class InputsC01 extends JPanel {
         bean_inputPin.setUcmts( ( InputPinC01 )cbo_line_ucmts.getSelectedItem() );
         bean_inputPin.setUcmts2( ( InputPinC01 )cbo_line_ucmts2.getSelectedItem() );
         bean_inputPin.setUcmts3( ( InputPinC01 )cbo_line_ucmts3.getSelectedItem() );
+        bean_inputPin.setDlb( ( InputPinC01 )cbo_line_dlb.getSelectedItem() );
         
         
         bean_inputPin.setUslInverted( chk_line_usl.isSelected() );
@@ -924,6 +946,7 @@ public class InputsC01 extends JPanel {
         bean_inputPin.setUcmtsInverted( chk_line_ucmts.isSelected() );
         bean_inputPin.setUcmts2Inverted( chk_line_ucmts2.isSelected() );
         bean_inputPin.setUcmts3Inverted( chk_line_ucmts3.isSelected() );
+        bean_inputPin.setDlbInverted( chk_line_dlb.isSelected() );
         return bean_inputPin;
     }
 
@@ -958,7 +981,7 @@ public class InputsC01 extends JPanel {
         cbo_line_ucmts.setModel( new DefaultComboBoxModel<>( items ) );
         cbo_line_ucmts2.setModel( new DefaultComboBoxModel<>( items ) );
         cbo_line_ucmts3.setModel( new DefaultComboBoxModel<>( items ) );
-		
+        cbo_line_dlb.setModel( new DefaultComboBoxModel<>( items ) );
         List<InputPinC01> list = Arrays.asList( items );
         
         this.cbo_line_usl.setSelectedItem( list.contains( bean_inputPin.getUsl() ) ? bean_inputPin.getUsl() : null );
@@ -989,6 +1012,7 @@ public class InputsC01 extends JPanel {
         this.cbo_line_ucmts.setSelectedItem( list.contains( bean_inputPin.getUcmts() ) ? bean_inputPin.getUcmts() : null );
         this.cbo_line_ucmts2.setSelectedItem( list.contains( bean_inputPin.getUcmts2() ) ? bean_inputPin.getUcmts2() : null );
         this.cbo_line_ucmts3.setSelectedItem( list.contains( bean_inputPin.getUcmts3() ) ? bean_inputPin.getUcmts3() : null );
+        this.cbo_line_dlb.setSelectedItem( list.contains( bean_inputPin.getDlb() ) ? bean_inputPin.getDlb() : null );
         
         this.chk_line_usl.setSelected( bean_inputPin.isUslInverted() );
         this.chk_line_lsl.setSelected( bean_inputPin.isLslInverted() );
@@ -1018,6 +1042,7 @@ public class InputsC01 extends JPanel {
         this.chk_line_ucmts.setSelected( bean_inputPin.isUcmtsInverted() );
         this.chk_line_ucmts2.setSelected( bean_inputPin.isUcmts2Inverted() );
         this.chk_line_ucmts3.setSelected( bean_inputPin.isUcmts3Inverted() );
+        this.chk_line_dlb.setSelected( bean_inputPin.isDlbInverted() );
     }
 
 
@@ -1162,6 +1187,10 @@ public class InputsC01 extends JPanel {
             state_line_ucmts3.setIcon( toIcon( bean != null && bean.getUcmts3() == null
 						                    ? null
 						                    : logicalXOR( chk_line_ucmts3.isSelected(), inputPinState.get( bean.getUcmts3() ) ) ) );
+            
+            state_line_dlb.setIcon( toIcon( bean != null && bean.getDlb() == null
+                    ? null
+                    : logicalXOR( chk_line_dlb.isSelected(), inputPinState.get( bean.getDlb() ) ) ) );
         	
         }
     }
@@ -1197,6 +1226,7 @@ public class InputsC01 extends JPanel {
         private InputPinC01 ucmts;
         private InputPinC01 ucmts2;
         private InputPinC01 ucmts3;
+        private InputPinC01 dlb;
         
         private boolean     uslInverted;
         private boolean     lslInverted;
@@ -1226,7 +1256,7 @@ public class InputsC01 extends JPanel {
         private boolean     ucmtsInverted;
         private boolean     ucmts2Inverted;
         private boolean     ucmts3Inverted;
-
+        private boolean		dlbInverted;
 
 
         public final String getFirmwareVersion() {
@@ -1373,6 +1403,11 @@ public class InputsC01 extends JPanel {
 		public boolean isUcmts3Inverted() {
 			return ucmts3Inverted;
 		}
+		
+
+		public boolean isDlbInverted() {
+			return dlbInverted;
+		}
 
 
 		public void setUslInverted ( boolean uslInverted ) {
@@ -1500,6 +1535,11 @@ public class InputsC01 extends JPanel {
 
 		public void setUcmts3Inverted(boolean ucmts3Inverted) {
 			this.ucmts3Inverted = ucmts3Inverted;
+		}
+
+
+		public void setDlbInverted(boolean dlbInverted) {
+			this.dlbInverted = dlbInverted;
 		}
 
 
@@ -1641,6 +1681,11 @@ public class InputsC01 extends JPanel {
 		}
 
 
+		public InputPinC01 getDlb() {
+			return dlb;
+		}
+
+
 		public void setUsl ( InputPinC01 usl ) {
             this.usl = usl;
         }
@@ -1773,6 +1818,10 @@ public class InputsC01 extends JPanel {
 
 		public void setUcmts3(InputPinC01 ucmts3) {
 			this.ucmts3 = ucmts3;
+		}
+
+		public void setDlb(InputPinC01 dlb) {
+			this.dlb = dlb;
 		}
 		
     }

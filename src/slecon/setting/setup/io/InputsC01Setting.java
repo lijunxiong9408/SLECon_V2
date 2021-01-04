@@ -459,6 +459,15 @@ public class InputsC01Setting extends SettingPanel<InputsC01> implements Page, L
                 bean.setUcmts3Inverted(isInverted);
             }
             
+            {
+                // NVADDR_IN_DLB_BITPOS
+                int raw = nvram.getUnsignedByte(NVAddress.NVADDR_IN_DLB_BITPOS.address).intValue();
+                boolean isInverted = raw > 0x7f;
+                int code = raw & 0x7f;
+                bean.setDlb(InputPinC01.getByRawIOPosition(code));
+                bean.setDlbInverted(isInverted);
+            }
+            
             if(solid==null)
                 solid = new Solid(bean);
             
@@ -506,6 +515,7 @@ public class InputsC01Setting extends SettingPanel<InputsC01> implements Page, L
 	            nvram.setByte( NVAddress.NVADDR_IN_UCMTS_BITPOS.address, (byte) (bean.isUcmtsInverted() ? ((int) bean.getUcmts().rawIOPos)+128 : bean.getUcmts().rawIOPos));
 	            nvram.setByte( NVAddress.NVADDR_IN_UCMTS2_BITPOS.address, (byte) (bean.isUcmts2Inverted() ? ((int) bean.getUcmts2().rawIOPos)+128 : bean.getUcmts2().rawIOPos));
 	            nvram.setByte( NVAddress.NVADDR_IN_UCMTS3_BITPOS.address, (byte) (bean.isUcmts3Inverted() ? ((int) bean.getUcmts3().rawIOPos)+128 : bean.getUcmts3().rawIOPos));
+	            nvram.setByte( NVAddress.NVADDR_IN_DLB_BITPOS.address, (byte) (bean.isDlbInverted() ? ((int) bean.getDlb().rawIOPos)+128 : bean.getDlb().rawIOPos));
 	            nvram.commit();
 	            return true;
 	        } catch (Exception e) {
