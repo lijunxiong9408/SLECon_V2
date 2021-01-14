@@ -26,6 +26,7 @@ import org.apache.logging.log4j.Logger;
 
 import comm.Agent;
 import comm.Parser_Error;
+import comm.Parser_McsNvram;
 import comm.Parser_Misc;
 import comm.Parser_Status;
 import comm.agent.AgentMessage;
@@ -53,6 +54,8 @@ public class CommissionSetting extends SettingPanel<Commission> implements Page,
     private Parser_Status      status;
     
     private Parser_Misc        misc;
+    
+    private Parser_McsNvram    nvram;
 
     
     
@@ -76,8 +79,9 @@ public class CommissionSetting extends SettingPanel<Commission> implements Page,
             error     = new Parser_Error( connBean.getIp(), connBean.getPort() );
             status    = new Parser_Status( connBean.getIp(), connBean.getPort() );
             misc      = new Parser_Misc( connBean.getIp(), connBean.getPort() );
+            nvram 	  = new Parser_McsNvram( connBean.getIp(), connBean.getPort() );
             MON_MGR.addEventListener( this, connBean.getIp(), connBean.getPort(),
-                    AgentMessage.MISC.getCode() | AgentMessage.STATUS.getCode() | AgentMessage.ERROR.getCode() );
+                    AgentMessage.MISC.getCode() | AgentMessage.STATUS.getCode() | AgentMessage.ERROR.getCode() | AgentMessage.MCS_NVRAM.getCode() );
             setHot();
         } catch ( Exception e ) {
             e.printStackTrace();
@@ -199,6 +203,7 @@ public class CommissionSetting extends SettingPanel<Commission> implements Page,
             bean_hardware.setInstallationMode(status.isInstallationMode());
             bean_hardware.setTemporaryDriverActivation(status.isTemporaryDriverActivation());
             bean_hardware.setSuspendDcsAutomation(status.isSuspendDCSAutomation());
+            bean_hardware.setMcsDebug( nvram.getUnsignedByte( ( short )0x1975 ) == 1 );
             
             final Commission.DynamicStatus bean_status = new Commission.DynamicStatus();
             bean_status.setMcex(status.getMcexMode()? 1 : 0);
@@ -241,6 +246,7 @@ public class CommissionSetting extends SettingPanel<Commission> implements Page,
         }
         misc.mcs((short) 0x3003, new byte[] { value }); // [CMD] CMD_SET_SPEED_REF
     }
+    
     
     private final static PageTreeExpression WRITE_MCS_EXPRESSION = new PageTreeExpression("write_mcs");
     public void setInstallationMode(boolean onoff) {
@@ -318,5 +324,11 @@ public class CommissionSetting extends SettingPanel<Commission> implements Page,
     public void bumper_test( byte flag ) {
     	misc.mcs((short)0x2ffd, new byte[]{ flag });
     }
+    
+    public void mcs_debug( byte enable) {
+    	nvram.setByte( ( short )0x1975, enable );
+    	nvram.commit();
+    }
+    
     
 }

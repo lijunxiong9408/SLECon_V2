@@ -38,7 +38,7 @@ public class Agent extends Thread {
     /**
      * MCS NVRAM data.
      */
-    public final byte[] mcs_nvram = new byte[ MCS_NVRAM_ADDR_COMMIT_WORD + 2564 ];
+    public final byte[] mcs_nvram = new byte[ MCS_NVRAM_ADDR_COMMIT_WORD + 2565 ];
 
     /**
      * Status data.
@@ -216,9 +216,10 @@ public class Agent extends Thread {
                 message = buffer[ 3 ];
                
                 // Parse what message taken.
- //               System.out.print( "Data total=" + total + " TYPE=" );
+                //System.out.print( "Data total=" + total + " TYPE=" );
                 switch ( message ) {
                     case AgentPacket.PACKET_STATUS :
+                    	//System.out.println( "PACKET_STATUS" );
                     	if((System.currentTimeMillis() - lastStatusTimer) > 5) {
                     		lastStatusTimer = System.currentTimeMillis();
                     		synchronized ( this.status ) {
@@ -269,7 +270,7 @@ public class Agent extends Thread {
                         this.notifier.AgentEvent( this, MonitorMgr.AgentState.DATA_UPDATE, AgentMessage.ERROR );
                     break;
                     case AgentPacket.PACKET_INIT :
- //                       System.out.println( "PACKET_INIT" );
+                        //System.out.println( "PACKET_INIT" );
                         synchronized ( this.ocs_config ) {
                             read( in, total, this.ocs_config, 0 );
                         }

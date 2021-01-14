@@ -63,6 +63,7 @@ public class Commission extends JPanel implements ActionListener, ChangeListener
 
     /*----------------------------------------------------------------------------*/
     private JLabel cpt_diagnostic;
+    private ValueCheckBox ebd_mcs_debug_mode;
     private PosButton btn_hardware_self_test;
     private PosButton btn_verify_nvram;
     
@@ -181,6 +182,8 @@ public class Commission extends JPanel implements ActionListener, ChangeListener
 
         /*----------------------------------------------------------------------------*/
         cpt_diagnostic = new JLabel();
+        ebd_mcs_debug_mode = new ValueCheckBox();
+        ebd_mcs_debug_mode.addActionListener( this );
         btn_hardware_self_test = new PosButton(BUTTON_PAUSE_ICON, BUTTON_START_ICON);
         btn_hardware_self_test.addActionListener( this );
         btn_verify_nvram = new PosButton(BUTTON_PAUSE_ICON, BUTTON_START_ICON);
@@ -193,6 +196,7 @@ public class Commission extends JPanel implements ActionListener, ChangeListener
         setButtonStyle( btn_verify_nvram );
 
         add( cpt_diagnostic, "gapbottom 18-12, span, top" );
+        add( ebd_mcs_debug_mode, "skip 2, span" );
         add( btn_hardware_self_test, "skip 2, span" );
         add( btn_verify_nvram, "skip 2, span, wrap 30, top" );
         
@@ -318,6 +322,7 @@ public class Commission extends JPanel implements ActionListener, ChangeListener
 
         /*----------------------------------------------------------------------------*/
         cpt_diagnostic.setText( getBundleText( "LBL_cpt_diagnostic", "Diagnostic" ) );
+        ebd_mcs_debug_mode.setText( getBundleText( "LBL_ebd_mcs_debug_mode", "MCS Debug" ) );
         btn_hardware_self_test.setText( getBundleText( "LBL_btn_hardware_self_test", "Hardware self test" ) );
         btn_verify_nvram.setText( getBundleText( "LBL_btn_verify_nvram", "Verify NVRAM" ) );
         
@@ -446,6 +451,7 @@ public class Commission extends JPanel implements ActionListener, ChangeListener
         private Boolean installationMode;
         private Boolean temporaryDriverActivation;
         private Boolean suspendDcsAutomation;
+        private Boolean mcsDebug;
 
 
         public Boolean getInstallationMode () {
@@ -461,9 +467,14 @@ public class Commission extends JPanel implements ActionListener, ChangeListener
         public Boolean getSuspendDcsAutomation () {
             return this.suspendDcsAutomation;
         }
+        
+
+        public Boolean getMcsDebug() {
+			return mcsDebug;
+		}
 
 
-        public void setInstallationMode ( Boolean installationMode ) {
+		public void setInstallationMode ( Boolean installationMode ) {
             this.installationMode = installationMode;
         }
 
@@ -476,6 +487,12 @@ public class Commission extends JPanel implements ActionListener, ChangeListener
         public void setSuspendDcsAutomation ( Boolean suspendDcsAutomation ) {
             this.suspendDcsAutomation = suspendDcsAutomation;
         }
+
+
+		public void setMcsDebug(Boolean mcsDebug) {
+			this.mcsDebug = mcsDebug;
+		}
+        
     }
 
 
@@ -485,6 +502,7 @@ public class Commission extends JPanel implements ActionListener, ChangeListener
         bean_hardware.setInstallationMode( ebd_installation_mode.isSelected() );
         bean_hardware.setTemporaryDriverActivation( ebd_temporary_driver_activation.isSelected() );
         bean_hardware.setSuspendDcsAutomation( ebd_suspend_dcs_automation.isSelected() );
+        bean_hardware.setMcsDebug( ebd_mcs_debug_mode.isSelected() );
         return bean_hardware;
     }
 
@@ -496,6 +514,9 @@ public class Commission extends JPanel implements ActionListener, ChangeListener
        
         this.ebd_suspend_dcs_automation.setOriginSelected( bean_hardware.getSuspendDcsAutomation() != null
                 && bean_hardware.getSuspendDcsAutomation() == true );
+        
+        this.ebd_mcs_debug_mode.setOriginSelected( bean_hardware.getMcsDebug() != null 
+        		&& bean_hardware.getMcsDebug() == true );
     }
 
 
@@ -551,6 +572,29 @@ public class Commission extends JPanel implements ActionListener, ChangeListener
         }
         if ( e.getSource() == btn_set_calibrate_analog_output ) {
             do_btn_set_calibrate_analog_output_actionPerformed( e );
+        }
+        if( e.getSource() == ebd_mcs_debug_mode ) {
+        	if ( settingPanel instanceof CommissionSetting ) {
+	        	final boolean selected = ebd_mcs_debug_mode.isSelected();
+	            if(selected) {
+	            	int ans = JOptionPane.showConfirmDialog( StartUI.getFrame(), TEXT.getString( "EnableMcsDebug.CONTEXT" ),
+	                        TEXT.getString( "MCS_Debug.TITLE" ), JOptionPane.ERROR_MESSAGE | JOptionPane.YES_NO_OPTION );
+	            	if ( ans == JOptionPane.YES_OPTION ) {
+	                    ( ( CommissionSetting )settingPanel ).mcs_debug( (byte)1 );
+	            	}else {
+	            		( ( CommissionSetting )settingPanel ).reset();
+	            	}
+	            	
+	            }else {
+	            	int ans = JOptionPane.showConfirmDialog( StartUI.getFrame(), TEXT.getString( "DisnableMcsDebug.CONTEXT" ),
+	                        TEXT.getString( "MCS_Debug.TITLE" ), JOptionPane.ERROR_MESSAGE | JOptionPane.YES_NO_OPTION );
+	            	if ( ans == JOptionPane.YES_OPTION ) {
+	            		( ( CommissionSetting )settingPanel ).mcs_debug( (byte)0 );
+	            	}else {
+	            		( ( CommissionSetting )settingPanel ).reset();
+	            	}
+	            }
+	        }
         }
         if ( e.getSource() == btn_verify_nvram ) {
             do_btn_verify_nvram_actionPerformed( e );
@@ -623,7 +667,12 @@ public class Commission extends JPanel implements ActionListener, ChangeListener
 		}
     }
 
-
+    
+    protected void do_ebd_mcs_debug_actionPerformed ( final ActionEvent e ) {
+        if ( settingPanel instanceof CommissionSetting )
+            ( ( CommissionSetting )settingPanel ).verifyNVRAM();
+    }
+    
     protected void do_btn_hardware_self_test_actionPerformed ( final ActionEvent e ) {
         if ( settingPanel instanceof CommissionSetting )
             ( ( CommissionSetting )settingPanel ).hardwareSelfTest();
