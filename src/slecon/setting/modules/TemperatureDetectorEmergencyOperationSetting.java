@@ -224,7 +224,7 @@ public class TemperatureDetectorEmergencyOperationSetting extends SettingPanel<T
             final TemperatureDetectorEmergencyOperation.DimDevicesBean bean_dimDevices = new TemperatureDetectorEmergencyOperation.DimDevicesBean();
             final TemperatureDetectorEmergencyOperation.DcsFanBean     bean_dcsFan     = new TemperatureDetectorEmergencyOperation.DcsFanBean();
             final TemperatureDetectorEmergencyOperation.DcsLightBean   bean_dcsLight   = new TemperatureDetectorEmergencyOperation.DcsLightBean();
-            final EventAggregator	ea  = EventAggregator.toEventAggregator( event.getEvent(), this.connBean );
+            final EventAggregator	ea  = EventAggregator.toEventAggregator( event.getEvent(), this.connBean  );
 
             // Initialize internal data.
             initFloorText();
@@ -283,7 +283,7 @@ public class TemperatureDetectorEmergencyOperationSetting extends SettingPanel<T
             final TemperatureDetectorEmergencyOperation.DimDevicesBean bean_dimDevices = app.getDimDevicesBean();
             final TemperatureDetectorEmergencyOperation.DcsFanBean     bean_dcsFan     = app.getDcsFanBean();
             final TemperatureDetectorEmergencyOperation.DcsLightBean   bean_dcsLight   = app.getDcsLightBean();
-            final EventAggregator                             ea              = EventAggregator.toEventAggregator( event.getEvent(), this.connBean );
+            final EventAggregator                             ea              = EventAggregator.toEventAggregator( event.getEvent(), this.connBean  );
 
             // General
             module.tdeo.setEnabled( bean_general.getEnabled() );
@@ -312,7 +312,7 @@ public class TemperatureDetectorEmergencyOperationSetting extends SettingPanel<T
             module.tdeo.setDisable_cabin_light_activation_time( bean_dcsLight.getActivationTimer0().intValue() );
 
             // Update Event with OCS Agent.
-            event.setEvent( ea.toByteArray( this.connBean ) );
+            event.setEvent( ea.toByteArray( this.connBean  ) );
             event.setInstalledDevices( ea.getInstalledDevices() );
             event.commit();
             module.commit();

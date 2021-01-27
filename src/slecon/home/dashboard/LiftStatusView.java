@@ -557,6 +557,8 @@ public class LiftStatusView extends JPanel implements ActionListener, Page, Lift
                         case UCMT:
                         case EQO:
                         case MCEX:
+                        case ACDO:
+                        case MOH:
                             led = LED2;
                             break;
                         case DCS :

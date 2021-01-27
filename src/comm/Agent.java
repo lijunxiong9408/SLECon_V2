@@ -73,7 +73,7 @@ public class Agent extends Thread {
     /**
      * Module data.
      */
-    public final byte[] module = new byte[ 17415 ];
+    public final byte[] module = new byte[ 17445 ];
 
     /**
      * Deployment data.

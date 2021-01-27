@@ -462,7 +462,7 @@ public class CarCallOption extends JPanel {
     }
     
     public void setP2oBean(Point2OperationBean p2oBean) {
-    	this.ebd_point_to_operation.setSelected(p2oBean.getEnabled());
+    	this.ebd_point_to_operation.setOriginSelected(p2oBean.getEnabled());
     	this.point2OperationTable.refreshData(p2oBean.clone());
     }
     

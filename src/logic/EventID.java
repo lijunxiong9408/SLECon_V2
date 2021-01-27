@@ -82,7 +82,10 @@ public enum EventID {
 	EVTID_SYSTEM_FAULT_WARNING( 1966, 0, null, null, null, CONSTANT ),
 	NONSTOP_OPERATION_PANEL_SWITCH( 1967, 0, null, null, null, CONSTANT ),
 	NONSTOP_CAR_LOCK( 1968, 0x7F, CANBus.CAR, DISABLED, NONE, LOCK ),
-	NONSTOP_HALL_LOCK( 2096, 0x7F, CANBus.HALL, DISABLED, NONE, LOCK );
+	NONSTOP_HALL_LOCK( 2096, 0x7F, CANBus.HALL, DISABLED, NONE, LOCK ),
+	EVTID_ACWS( 2224, 0, null, null, null, CONSTANT ),
+	EVTID_ACDU( 2225, 0, null, null, null, CONSTANT ),
+	EVTID_EPO_MANUAL( 2226, 0, null, null, null, CONSTANT );
 	
     private static final ResourceBundle TEXT = ToolBox.getResourceBundle( "logic.EventID" );
     public final int       eventID;

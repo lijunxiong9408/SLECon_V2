@@ -24,7 +24,7 @@ public class Parser_Module {
     /**
      * The total size of module data.
      */
-    public static final int SIZE = 17415;
+    public static final int SIZE = 17445;
     
     /**
      * Module data.
@@ -52,6 +52,8 @@ public class Parser_Module {
     public final DHO  dho  = new DHO();
     public final EPB  epb  = new EPB();
     public final NONSTOP nonstop = new NONSTOP();
+    public final ACDO  acdo = new ACDO();
+    public final MOH  moh = new MOH();
 
     /**
      * Module parser.
@@ -1367,80 +1369,122 @@ public class Parser_Module {
             }
         }
 
-
         public void setEnabled ( boolean enabled ) {
             synchronized ( module ) {
                 module[ OFFSET + 0 ] = ( byte )Endian.setBitsValue( module[ OFFSET + 0 ], enabled ? 1 : 0, 0, 0 );
             }
         }
-
-
-        public byte getScheme () {
+        
+        public byte getLedBehavior () {
             synchronized ( module ) {
-                return ( byte )Endian.getBitsValue( module[ OFFSET + 0 ], 1, 1 );
+                return ( byte )Endian.getBitsValue( module[ OFFSET + 0 ], 1, 2 );
             }
         }
 
+        public void setLedBehavior ( byte led_Behavior ) {
+            synchronized ( module ) {
+            	module[ OFFSET + 0 ] = ( byte )Endian.setBitsValue( module[ OFFSET + 0 ], led_Behavior, 1, 2 );
+            }
+        }
+        
+        public boolean isFrontDoorEnabled () {
+            synchronized ( module ) {
+                return Endian.getBitsValue( module[ OFFSET + 0 ], 3, 3 ) != 0;
+            }
+        }
+
+        public void setFrontDoorEnabled ( boolean enabled ) {
+            synchronized ( module ) {
+                module[ OFFSET + 0 ] = ( byte )Endian.setBitsValue( module[ OFFSET + 0 ], enabled ? 1 : 0, 3, 3 );
+            }
+        }
+        
+        public boolean isRearDoorEnabled () {
+            synchronized ( module ) {
+                return Endian.getBitsValue( module[ OFFSET + 0 ], 4, 4 ) != 0;
+            }
+        }
+
+
+        public void setRearDoorEnabled ( boolean enabled ) {
+            synchronized ( module ) {
+                module[ OFFSET + 0 ] = ( byte )Endian.setBitsValue( module[ OFFSET + 0 ], enabled ? 1 : 0, 4, 4 );
+            }
+        }
+        
+        public byte getScheme () {
+            synchronized ( module ) {
+                return ( byte )Endian.getBitsValue( module[ OFFSET + 0 ], 5, 6 );
+            }
+        }
 
         public void setScheme ( byte scheme ) {
             synchronized ( module ) {
-                module[ OFFSET + 0 ] = ( byte )Endian.setBitsValue( module[ OFFSET + 0 ], scheme, 1, 1 );
+                module[ OFFSET + 0 ] = ( byte )Endian.setBitsValue( module[ OFFSET + 0 ], scheme, 5, 6 );
             }
         }
-
-
-        public byte getMaximum_elevators_run () {
+        
+        public byte getReturn_floor () {
             synchronized ( module ) {
-                return ( byte )Endian.getBitsValue( module[ OFFSET + 0 ], 2, 5 );
+                return module[ OFFSET + 1 ];
             }
         }
 
-
-        public void setMaximum_elevators_run ( byte maximum_elevators_run ) {
+        public void setReturn_floor ( byte return_floor ) {
             synchronized ( module ) {
-                module[ OFFSET + 0 ] = ( byte )Endian.setBitsValue( module[ OFFSET + 0 ], maximum_elevators_run, 2, 5 );
+                module[ OFFSET + 1 ] = return_floor;
+            }
+        }
+        
+        public byte getDoorCloseTime () {
+            synchronized ( module ) {
+                return module[ OFFSET + 2 ];
             }
         }
 
-
+        public void setDoorCloseTime ( byte times ) {
+            synchronized ( module ) {
+                module[ OFFSET + 2 ] = times;
+            }
+        }
+        
         public byte getCar_message () {
             synchronized ( module ) {
-            	return module[ OFFSET + 1 ];
+            	return module[ OFFSET + 3 ];
             }
         }
 
 
         public void setCar_message ( byte car_message ) {
             synchronized ( module ) {
-            	module[ OFFSET + 1 ] = car_message;
+            	module[ OFFSET + 3 ] = car_message;
             }
         }
 
 
         public byte getHall_message () {
             synchronized ( module ) {
-            	return module[ OFFSET + 2 ];
+            	return module[ OFFSET + 4 ];
             }
         }
 
 
         public void setHall_message ( byte hall_message ) {
             synchronized ( module ) {
-            	module[ OFFSET + 2 ] = hall_message;
+            	module[ OFFSET + 4 ] = hall_message;
+            }
+        }
+        
+        public int getAutoRunSelector () {
+            synchronized ( module ) {
+                return ( int )Endian.getShort( module, OFFSET + 5 );
             }
         }
 
 
-        public byte getReturn_floor () {
+        public void setAutoRunSelector ( int seletor ) {
             synchronized ( module ) {
-                return module[ OFFSET + 3 ];
-            }
-        }
-
-
-        public void setReturn_floor ( byte return_floor ) {
-            synchronized ( module ) {
-                module[ OFFSET + 3 ] = return_floor;
+            	System.arraycopy(Endian.getIntByteArray(seletor), 0, module, OFFSET + 5, 2);
             }
         }
     }
@@ -1970,7 +2014,7 @@ public class Parser_Module {
      * Temperature Detector Emergency Operation.
      */
     public class Tdeo {
-        private static final int OFFSET = 16656;
+    	private static final int OFFSET = 16656;
         
         public boolean isEnabled () {
             synchronized ( module ) {
@@ -2956,6 +3000,256 @@ public class Parser_Module {
                 	module[ OFFSET + 258 + i ] = table[ i ];
             }
         }
+    }
+    
+    /**
+     * Air condition Drain operation.
+     */
+    public class ACDO {
+        private static final int OFFSET = 17406;
+        
+        public boolean isEnabled () {
+            synchronized ( module ) {
+                return Endian.getBitsValue( module[ OFFSET + 0 ], 0, 0 ) != 0;
+            }
+        }
+
+        public void setEnabled ( boolean enabled ) {
+            synchronized ( module ) {
+                module[ OFFSET + 0 ] = ( byte )Endian.setBitsValue( module[ OFFSET + 0 ], enabled ? 1 : 0, 0, 0 );
+            }
+        }
+        
+        public byte getCar_message () {
+            synchronized ( module ) {
+            	return module[ OFFSET + 1 ];
+            }
+        }
+
+        public void setCar_message ( byte car_message ) {
+            synchronized ( module ) {
+            	module[ OFFSET + 1 ] = car_message;
+            }
+        }
+
+        public byte getHall_message () {
+            synchronized ( module ) {
+            	return module[ OFFSET + 2 ];
+            }
+        }
+
+        public void setHall_message ( byte hall_message ) {
+            synchronized ( module ) {
+            	module[ OFFSET + 2 ] = hall_message;
+            }
+        }
+
+        public int getReturn_floor () {
+            synchronized ( module ) {
+                return module[ OFFSET + 3 ];
+            }
+        }
+
+        public void setReturn_floor ( int return_floor ) {
+            synchronized ( module ) {
+                module[ OFFSET + 3 ] = ( byte )return_floor;
+            }
+        }
+    }
+    
+    /**
+     * Motor overheating operation.
+     */
+    public class MOH {
+    	private static final int OFFSET = 17415;
+        
+        public boolean isEnabled () {
+            synchronized ( module ) {
+                return Endian.getBitsValue( module[ OFFSET + 0 ], 0, 0 ) != 0;
+            }
+        }
+
+
+        public void setEnabled ( boolean enabled ) {
+            synchronized ( module ) {
+                module[ OFFSET + 0 ] = ( byte )Endian.setBitsValue( module[ OFFSET + 0 ], enabled ? 1 : 0, 0, 0 );
+            }
+        }
+
+
+        public boolean isEnable_energy_saving_on_car () {
+            synchronized ( module ) {
+                return Endian.getBitsValue( module[ OFFSET + 0 ], 1, 1 ) != 0;
+            }
+        }
+
+
+        public void setEnable_energy_saving_on_car ( boolean enable_energy_saving_on_car ) {
+            synchronized ( module ) {
+                module[ OFFSET + 0 ] = ( byte )Endian.setBitsValue( module[ OFFSET + 0 ], enable_energy_saving_on_car ? 1 : 0, 1, 1 );
+            }
+        }
+
+
+        public boolean isEnable_energy_saving_on_hall () {
+            synchronized ( module ) {
+                return Endian.getBitsValue( module[ OFFSET + 0 ], 2, 2 ) != 0;
+            }
+        }
+
+
+        public void setEnable_energy_saving_on_hall ( boolean enable_energy_saving_on_hall ) {
+            synchronized ( module ) {
+                module[ OFFSET + 0 ] = ( byte )Endian.setBitsValue( module[ OFFSET + 0 ], enable_energy_saving_on_hall ? 1 : 0, 2, 2 );
+            }
+        }
+
+
+        public boolean isDisable_cabin_fan () {
+            synchronized ( module ) {
+                return Endian.getBitsValue( module[ OFFSET + 0 ], 3, 3 ) != 0;
+            }
+        }
+
+
+        public void setDisable_cabin_fan ( boolean disable_cabin_fan ) {
+            synchronized ( module ) {
+                module[ OFFSET + 0 ] = ( byte )Endian.setBitsValue( module[ OFFSET + 0 ], disable_cabin_fan ? 1 : 0, 3, 3 );
+            }
+        }
+
+
+        public boolean isDisable_cabin_light () {
+            synchronized ( module ) {
+                return Endian.getBitsValue( module[ OFFSET + 0 ], 4, 4 ) != 0;
+            }
+        }
+
+
+        public void setDisable_cabin_light ( boolean disable_cabin_light ) {
+            synchronized ( module ) {
+                module[ OFFSET + 0 ] = ( byte )Endian.setBitsValue( module[ OFFSET + 0 ], disable_cabin_light ? 1 : 0, 4, 4 );
+            }
+        }
+
+        public byte getCar_message () {
+            synchronized ( module ) {
+            	return module[ OFFSET + 1 ];
+            }
+        }
+
+
+        public void setCar_message ( byte car_message ) {
+            synchronized ( module ) {
+            	module[ OFFSET + 1 ] = car_message;
+            }
+        }
+
+
+        public byte getHall_message () {
+            synchronized ( module ) {
+            	return module[ OFFSET + 2 ];
+            }
+        }
+
+
+        public void setHall_message ( byte hall_message ) {
+            synchronized ( module ) {
+            	module[ OFFSET + 2 ] = hall_message;
+            }
+        }
+        
+
+        public byte getLedBehavior () {
+            synchronized ( module ) {
+                return ( byte )Endian.getBitsValue( module[ OFFSET + 3 ], 0, 1 );
+            }
+        }
+
+        public void setLedBehavior ( byte led_Behavior ) {
+            synchronized ( module ) {
+            	module[ OFFSET + 3 ] = ( byte )Endian.setBitsValue( module[ OFFSET + 3 ], led_Behavior, 0, 1 );
+            }
+        }
+
+
+        public int getEnable_energy_saving_activation_time () {
+            synchronized ( module ) {
+                return Endian.getInt( module, OFFSET + 4 ) / 1000;
+            }
+        }
+
+
+        public void setEnable_energy_saving_activation_time ( int enable_energy_saving_activation_time ) {
+            synchronized ( module ) {
+                System.arraycopy( Endian.getIntByteArray( enable_energy_saving_activation_time * 1000 ), 0, module, OFFSET + 4, 4 );
+            }
+        }
+
+
+        public int getDisable_cabin_fan_activation_time () {
+            synchronized ( module ) {
+                return Endian.getInt( module, OFFSET + 8 ) / 1000;
+            }
+        }
+
+
+        public void setDisable_cabin_fan_activation_time ( int disable_cabin_fan_activation_time ) {
+            synchronized ( module ) {
+                System.arraycopy( Endian.getIntByteArray( disable_cabin_fan_activation_time * 1000 ), 0, module, OFFSET + 8, 4 );
+            }
+        }
+
+
+        public int getDisable_cabin_light_activation_time () {
+            synchronized ( module ) {
+                return Endian.getInt( module, OFFSET + 12 ) / 1000;
+            }
+        }
+
+
+        public void setDisable_cabin_light_activation_time ( int disable_cabin_light_activation_time ) {
+            synchronized ( module ) {
+                System.arraycopy( Endian.getIntByteArray( disable_cabin_light_activation_time * 1000 ), 0, module, OFFSET + 12, 4 );
+            }
+        }
+        
+        public boolean isEnable_front_buzzer () {
+            synchronized ( module ) {
+                return Endian.getBitsValue( module[ OFFSET + 16 ], 0, 0 ) != 0;
+            }
+        }
+        
+        public void setEnable_front_buzzer ( boolean enable_front_sgs ) {
+            synchronized ( module ) {
+                module[ OFFSET + 16 ] = ( byte )Endian.setBitsValue( module[ OFFSET + 16 ], enable_front_sgs ? 1 : 0, 0, 0 );
+            }
+        }
+        
+        public boolean isEnable_rear_buzzer () {
+            synchronized ( module ) {
+                return Endian.getBitsValue( module[ OFFSET + 16 ], 1, 1 ) != 0;
+            }
+        }
+        
+        public void setEnable_rear_buzzer ( boolean enable_rear_sgs ) {
+            synchronized ( module ) {
+                module[ OFFSET + 16 ] = ( byte )Endian.setBitsValue( module[ OFFSET + 16 ], enable_rear_sgs ? 1 : 0, 1, 1 );
+            }
+        }
+        
+        public int getDoor_close_timer () {
+            synchronized ( module ) {
+                return Endian.getInt( module, OFFSET + 17 ) / 1000;
+            }
+        }
+
+        public void setDoor_close_timer ( int door_close_timer ) {
+            synchronized ( module ) {
+                System.arraycopy( Endian.getIntByteArray( door_close_timer * 1000 ), 0, module, OFFSET + 17, 4 );
+            }
+        }
+    	
     }
 }
 

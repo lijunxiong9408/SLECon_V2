@@ -3,7 +3,6 @@ import static logic.util.SiteManagement.MON_MGR;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 import javax.swing.JOptionPane;
@@ -18,12 +17,10 @@ import slecon.StartUI;
 import slecon.ToolBox;
 import slecon.component.SettingPanel;
 import slecon.component.Workspace;
-import slecon.interfaces.ConvertException;
 import slecon.interfaces.Page;
 import slecon.interfaces.SetupView;
 import slecon.setting.modules.EmergencyPowerOperation.GeneralBean;
-import slecon.setting.modules.EmergencyPowerOperation.IOSettingsBean;
-import slecon.setting.modules.EmergencyPowerOperation.StrategyBean;
+import slecon.setting.modules.LedBehavior.Led_Behavior;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -34,8 +31,8 @@ import comm.Parser_Error;
 import comm.Parser_Event;
 import comm.Parser_Module;
 import comm.agent.AgentMessage;
-import comm.constants.AuthLevel.Role;
 import comm.constants.DeviceMessage;
+import comm.constants.AuthLevel.Role;
 import comm.event.LiftDataChangedListener;
 
 
@@ -219,36 +216,33 @@ public class EmergencyPowerOperationSetting extends SettingPanel<EmergencyPowerO
         try {
             final EventAggregator                         ea           = EventAggregator.toEventAggregator( event.getEvent(), this.connBean );
             final EmergencyPowerOperation.GeneralBean    bean_general  = new EmergencyPowerOperation.GeneralBean();
-            final EmergencyPowerOperation.IOSettingsBean bean_io       = new EmergencyPowerOperation.IOSettingsBean();
-            final EmergencyPowerOperation.StrategyBean   bean_strategy = new EmergencyPowerOperation.StrategyBean();
 
             // Initialize internal data.
             initFloorText();
-
-            /* General */
+            
             bean_general.setEnabled( module.epo.isEnabled() );
-            bean_general.setMaximumElevatorsRun( ( long )module.epo.getMaximum_elevators_run() );
+            bean_general.setDoorOpenLed( Led_Behavior.get(module.epo.getLedBehavior()) );
+            bean_general.setDoorFrontOpen( module.epo.isFrontDoorEnabled() );
+            bean_general.setDoorRearOpen( module.epo.isRearDoorEnabled() );
+            bean_general.setStragetyAuto( module.epo.getScheme() == 1 );
+            bean_general.setStragetyManual( module.epo.getScheme() == 2 );
+            bean_general.setReturnFloor( getFloorTextByFloor(module.epo.getReturn_floor()) );
+            bean_general.setCloseDoorTime( (long)module.epo.getDoorCloseTime() );
             bean_general.setCarMessage( DeviceMessage.get( module.epo.getCar_message() ) );
             bean_general.setHallMessage( DeviceMessage.get( module.epo.getHall_message() ) );
-
-            /* IO setting */
-            bean_io.setEpoEvent( ea.getEvent( EventID.EPO_SWITCH.eventID ) );
+            bean_general.setAutoRunSeletor( module.epo.getAutoRunSelector() );
             
-            /* Strategy */
-            bean_strategy.setRecoveryHasPriority( module.epo.getScheme() == 0 );
-            bean_strategy.setOperationHasPrioirty( module.epo.getScheme() == 1 );
-            bean_strategy.setReturnFloor( getFloorTextByFloor( module.epo.getReturn_floor() ) );
+            bean_general.setEpoEvent( ea.getEvent( EventID.EPO_SWITCH.eventID ) );
+            bean_general.setManualEvent( ea.getEvent( EventID.EVTID_EPO_MANUAL.eventID ) );
 
             if (solid == null)
-                solid = new Solid(bean_general, bean_io, bean_strategy);
+                solid = new Solid(bean_general);
             // Update returned data to visualization components.
             SwingUtilities.invokeLater( new Runnable() {
                 @Override
                 public void run () {
                     app.stop();
                     app.setGeneralBean( bean_general );
-                    app.setIOSettingsBean( bean_io );
-                    app.setStrategyBean( bean_strategy );
                     app.start();
                 }
             } );
@@ -261,29 +255,32 @@ public class EmergencyPowerOperationSetting extends SettingPanel<EmergencyPowerO
     public boolean submit () {
         try {
             final EmergencyPowerOperation.GeneralBean  bean_general  = app.getGeneralBean();
-            final EmergencyPowerOperation.IOSettingsBean bean_io     = app.getIOSettingsBean();
-            final EmergencyPowerOperation.StrategyBean bean_strategy = app.getStrategyBean();
             final EventAggregator                      ea            = EventAggregator.toEventAggregator( event.getEvent(), this.connBean );
 
-
-            /* General */
             module.epo.setEnabled( bean_general.getEnabled() );
-            module.epo.setMaximum_elevators_run( bean_general.getMaximumElevatorsRun().byteValue() );
+            module.epo.setLedBehavior( bean_general.getDoorOpenLed().getCode() );
+            module.epo.setFrontDoorEnabled( bean_general.getDoorFrontOpen() );
+            module.epo.setRearDoorEnabled( bean_general.getDoorRearOpen() );
+            
+            if( bean_general.getStragetyAuto() )
+            	module.epo.setScheme( (byte)1 );
+            else 
+            	module.epo.setScheme( (byte)2 );
+            
+            module.epo.setReturn_floor( bean_general.getReturnFloor().getFloor() );
+            module.epo.setDoorCloseTime( (byte)bean_general.getCloseDoorTime().intValue() );
             module.epo.setCar_message( bean_general.getCarMessage().getCode() );
             module.epo.setHall_message( bean_general.getHallMessage().getCode() );
-
-            /* IO setting */
-            ea.setEvent( EventID.EPO_SWITCH.eventID, bean_io.getEpoEvent() );
+            module.epo.setAutoRunSelector( bean_general.getAutoRunSeletor() );
             
-            /* Strategy */
-            module.epo.setScheme( ( byte )( bean_strategy.getRecoveryHasPriority() ? 0 : 1 ) );
-            module.epo.setReturn_floor( bean_strategy.getReturnFloor().getFloor() );
-            module.commit();
+            ea.setEvent( EventID.EPO_SWITCH.eventID, bean_general.getEpoEvent() );
+            ea.setEvent( EventID.EVTID_EPO_MANUAL.eventID, bean_general.getManualEvent() );
 
-            /* Update Event with OCS Agent. */
             event.setEvent( ea.toByteArray( this.connBean ) );
             event.setInstalledDevices( ea.getInstalledDevices() );
             event.commit();
+            module.commit();
+            
             return true;
         } catch ( Exception e ) {
             JOptionPane.showMessageDialog( StartUI.getFrame(), "an error has come. " + e.getMessage() );
@@ -301,8 +298,6 @@ public class EmergencyPowerOperationSetting extends SettingPanel<EmergencyPowerO
                 public void run () {
                     app.stop();
                     app.setGeneralBean( solid.bean_general );
-                    app.setIOSettingsBean( solid.bean_io );
-                    app.setStrategyBean( solid.bean_strategy );
                     app.start();
                 }
             } );
@@ -345,17 +340,10 @@ public class EmergencyPowerOperationSetting extends SettingPanel<EmergencyPowerO
     ///////////////////////////////////////////////////////////////////////////////////////
     public class Solid {
         private EmergencyPowerOperation.GeneralBean  bean_general;
-        private EmergencyPowerOperation.IOSettingsBean bean_io;
-        private EmergencyPowerOperation.StrategyBean bean_strategy;
 
-
-
-
-        public Solid ( GeneralBean bean_general, IOSettingsBean bean_io, StrategyBean bean_strategy ) {
+        public Solid ( GeneralBean bean_general ) {
             super();
             this.bean_general  = bean_general;
-            this.bean_io  = bean_io;
-            this.bean_strategy = bean_strategy;
         }
     }
 }

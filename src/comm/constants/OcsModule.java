@@ -133,8 +133,17 @@ public enum OcsModule {
 	/**
      * MCEX Running.
      */
-    MCEX( ( byte )25 );
+    MCEX( ( byte )25 ),
 	
+	/**
+     * ACDO operation.
+     */
+    ACDO( ( byte )26 ),
+    
+    /**
+     * MOH operation.
+     */
+    MOH( ( byte )27 );
 	
     /**
      * Lookup table.

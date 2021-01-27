@@ -956,7 +956,9 @@ public class Main extends JPanel implements Page, ActionListener, LiftDataChange
         if ( JOptionPane.showConfirmDialog( this, TEXT.getString( "Dialog.ExportLog.format" ), TEXT.getString( "Dialog.title" ),
                 JOptionPane.YES_NO_OPTION ) == JOptionPane.YES_OPTION ) {
         	try {
-				ExportLogByJTable( table, new File("Log.xls") );
+        		SimpleDateFormat date = new SimpleDateFormat("yyyyMMdd-HH-mm-ss");
+        		String filePath = "log_"+ date.format(new Date( System.currentTimeMillis() ))+ ".txt";
+				ExportLogByJTable( table, new File( filePath.trim() ) );
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -1005,14 +1007,22 @@ public class Main extends JPanel implements Page, ActionListener, LiftDataChange
 		FileWriter out = new FileWriter(file);
 		
 		for(int i=0; i < model.getColumnCount(); i++) {
-			out.write(model.getColumnName(i) + "\t");
+			if( i != 4 ) {
+				out.write( model.getColumnName(i) + "\t");
+			} 
 		}
 		
 		out.write("\n");
 		
 		for(int i=0; i< model.getRowCount(); i++) {
 			for(int j=0; j < model.getColumnCount(); j++) {
-				out.write(model.getValueAt(i,j).toString()+"\t");
+				if( j == 2 ) {
+					int code = Integer.parseInt( model.getValueAt(i,j).toString() );
+					String codeStr = "0x"+Integer.toHexString(code);
+					out.write( codeStr + "\t");
+				}else if( j != 4 ) {
+					out.write( model.getValueAt(i,j).toString() + "\t");
+				}
 			}
 			out.write("\n");
 		}

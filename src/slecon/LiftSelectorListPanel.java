@@ -157,6 +157,9 @@ public class LiftSelectorListPanel extends JPanel {
     	        case EPB:
     	        case UCMT:
     	        case EQO:
+    	        case MCEX:
+                case ACDO:
+                case MOH:
     	            led = LED2;
     	            break;
     	        case DCS :
