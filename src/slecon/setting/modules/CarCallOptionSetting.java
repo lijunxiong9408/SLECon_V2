@@ -23,6 +23,7 @@ import slecon.setting.modules.CarCallOption.ASPBEAN;
 import slecon.setting.modules.CarCallOption.AntiNuisanceCarCallOperationBean;
 import slecon.setting.modules.CarCallOption.CallsInDoubleClickClearBean;
 import slecon.setting.modules.CarCallOption.CallsInOppositeDirectionAutoClearBean;
+import slecon.setting.modules.CarCallOption.FloorTextChangeStategy;
 import slecon.setting.modules.CarCallOption.NearStopBean;
 import slecon.setting.modules.CarCallOption.Point2OperationBean;
 
@@ -210,6 +211,7 @@ public class CarCallOptionSetting extends SettingPanel<CarCallOption> implements
         
         try {
     	    final EventAggregator            ea                  = EventAggregator.toEventAggregator( event.getEvent(), this.connBean );
+    	    final CarCallOption.FloorTextChangeStategy bean_stategy = new CarCallOption.FloorTextChangeStategy();
             final CarCallOption.AntiNuisanceCarCallOperationBean bean_antiNuisanceCarCallOperation =
                 new CarCallOption.AntiNuisanceCarCallOperationBean();
             final CarCallOption.CallsInOppositeDirectionAutoClearBean bean_callsInOppositeDirectionAutoClear =
@@ -223,6 +225,9 @@ public class CarCallOptionSetting extends SettingPanel<CarCallOption> implements
             final ASPBEAN	bean_asp = new ASPBEAN();
             
             final Point2OperationBean bean_p2o = new Point2OperationBean();
+            
+            /* Floor text change stategy. */
+            bean_stategy.setStategy(module.cco.getFloorChangeStategy());
             
             /* AntiNuisanceCarCallOperation */
             bean_antiNuisanceCarCallOperation.setEnabled( module.cco.isAnti_nuisance_car_call_operation_enabled() );
@@ -250,7 +255,7 @@ public class CarCallOptionSetting extends SettingPanel<CarCallOption> implements
             bean_p2o.setDoorEnableAction(module.p2o.getStrategy());
             
             if ( solid == null )
-                 solid = new Solid( bean_antiNuisanceCarCallOperation, bean_callsInOppositeDirectionAutoClear,
+                 solid = new Solid( bean_stategy, bean_antiNuisanceCarCallOperation, bean_callsInOppositeDirectionAutoClear,
                 				   bean_callsInDoubleClickAutoClear, bean_nearstop, bean_asp, bean_p2o );
 
             // Update returned data to visualization components.
@@ -258,6 +263,7 @@ public class CarCallOptionSetting extends SettingPanel<CarCallOption> implements
                 @Override
                 public void run () {
                     app.stop();
+                    app.setFloorChangeStategy(bean_stategy);
                     app.setAntiNuisanceCarCallOperationBean( bean_antiNuisanceCarCallOperation );
                     app.setCallsInOppositeDirectionAutoClearBean( bean_callsInOppositeDirectionAutoClear );
                     app.setCallsInDoubleClickAutoClearBean(bean_callsInDoubleClickAutoClear);
@@ -275,6 +281,7 @@ public class CarCallOptionSetting extends SettingPanel<CarCallOption> implements
 
     public boolean submit () {
         try {
+        	final CarCallOption.FloorTextChangeStategy bean_stategy = app.getFloorChangeStategy();
             final CarCallOption.AntiNuisanceCarCallOperationBean bean_antiNuisanceCarCallOperation =
                 app.getAntiNuisanceCarCallOperationBean();
             final CarCallOption.CallsInOppositeDirectionAutoClearBean bean_callsInOppositeDirectionAutoClear =
@@ -289,6 +296,9 @@ public class CarCallOptionSetting extends SettingPanel<CarCallOption> implements
             final CarCallOption.Point2OperationBean bean_p2o	  = app.getP2oBean();
             
             final EventAggregator      ea                  = EventAggregator.toEventAggregator( event.getEvent(), this.connBean );
+            
+            /* Floor text change stategy */
+            module.cco.setFloorChangeStategy( (byte)bean_stategy.getStategy() );
             
             /* AntiNuisanceCarCallOperation */
             module.cco.setAnti_nuisance_car_call_operation_enabled( bean_antiNuisanceCarCallOperation.getEnabled() );
@@ -345,6 +355,7 @@ public class CarCallOptionSetting extends SettingPanel<CarCallOption> implements
 
     ///////////////////////////////////////////////////////////////////////////////////////
     private static final class Solid {
+    	final CarCallOption.FloorTextChangeStategy bean_stategy;
         final CarCallOption.AntiNuisanceCarCallOperationBean      bean_antiNuisanceCarCallOperation;
         final CarCallOption.CallsInOppositeDirectionAutoClearBean bean_callsInOppositeDirectionAutoClear;
         final CarCallOption.CallsInDoubleClickClearBean			  bean_callsInDoubleClickAutoClear;
@@ -353,10 +364,11 @@ public class CarCallOptionSetting extends SettingPanel<CarCallOption> implements
         final CarCallOption.Point2OperationBean bean_p2o;
 
 
-        public Solid ( AntiNuisanceCarCallOperationBean bean_antiNuisanceCarCallOperation,
+        public Solid ( FloorTextChangeStategy bean_stategy, AntiNuisanceCarCallOperationBean bean_antiNuisanceCarCallOperation,
                        CallsInOppositeDirectionAutoClearBean bean_callsInOppositeDirectionAutoClear,
                        CallsInDoubleClickClearBean bean_callsInDoubleClickAutoClear,NearStopBean bean_Near_stop,
                        ASPBEAN bean_asp, Point2OperationBean bean_p2o) {
+        	this.bean_stategy = bean_stategy;
             this.bean_antiNuisanceCarCallOperation      = bean_antiNuisanceCarCallOperation;
             this.bean_callsInOppositeDirectionAutoClear = bean_callsInOppositeDirectionAutoClear;
             this.bean_callsInDoubleClickAutoClear = bean_callsInDoubleClickAutoClear;

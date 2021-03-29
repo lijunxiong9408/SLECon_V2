@@ -59,12 +59,18 @@ public class Motion extends JPanel {
     private JLabel 				 lbl_value_recommended_shaft_limit_lsl_usl_length;
     private Fmt_maximum_linear_speed_mm_sDocumentListener maximum_linear_speed_mm_listener;
 
+    /* ---------------------------------------------------------------------------- */
     private JLabel cpt_driver_type;
     private ValueCheckBox ebd_fuji_vf_driver_over_can_bus;
     
-
-
-
+    
+    /* ---------------------------------------------------------------------------- */
+    private JLabel 				 cpt_brake_control;
+    private JLabel 				 lbl_brake_open_voltage;
+    private ValueTextField 		 fmt_brake_open_voltage;
+    private JLabel 				 lbl_brake_keep_voltage;
+    private ValueTextField 		 fmt_brake_keep_voltage;
+    
     public Motion () {
         initGUI();
     }
@@ -184,7 +190,34 @@ public class Motion extends JPanel {
         add( cpt_driver_type, "gapbottom 18-12, span, aligny center" );
         add( ebd_fuji_vf_driver_over_can_bus, "skip 1, span, wrap 30, top" );
         
-
+        
+        /* ---------------------------------------------------------------------------- */
+        cpt_brake_control = new JLabel();
+        lbl_brake_open_voltage = new JLabel();
+        fmt_brake_open_voltage = new ValueTextField();
+        lbl_brake_keep_voltage = new JLabel();
+        fmt_brake_keep_voltage = new ValueTextField();
+        
+        setCaptionStyle( cpt_brake_control );
+        setTextLabelStyle( lbl_brake_open_voltage );
+        setTextLabelStyle( lbl_brake_keep_voltage );
+        
+        fmt_brake_open_voltage.setColumns( 10 );
+        fmt_brake_open_voltage.setHorizontalAlignment( SwingConstants.RIGHT );
+        fmt_brake_open_voltage.setScope( Long.class, 0L, 100L, true, true );
+        fmt_brake_open_voltage.setEmptyValue( 0 );
+        
+        fmt_brake_keep_voltage.setColumns( 10 );
+        fmt_brake_keep_voltage.setHorizontalAlignment( SwingConstants.RIGHT );
+        fmt_brake_keep_voltage.setScope( Long.class, 0L, 100L, true, true );
+        fmt_brake_keep_voltage.setEmptyValue( 0 );
+        
+        add( cpt_brake_control, "gapbottom 18-12, span, top" );
+        add( lbl_brake_open_voltage, "skip 2, span, split 2, left, top, gapright 30" );
+        add( fmt_brake_open_voltage, "wrap" );
+        add( lbl_brake_keep_voltage, "skip 2, span, split 2, left, top, gapright 30" );
+        add( fmt_brake_keep_voltage, "wrap 30" );
+        
         /* ---------------------------------------------------------------------------- */
         bindGroup( "RevolutionPerMinuteRpm", lbl_revolution_per_minute_rpm, fmt_revolution_per_minute_rpm );
         bindGroup( "MaximumLinearSpeedMmS", lbl_maximum_linear_speed_mm_s, fmt_maximum_linear_speed_mm_s );
@@ -228,6 +261,11 @@ public class Motion extends JPanel {
         /* ---------------------------------------------------------------------------- */
         cpt_driver_type.setText( getBundleText( "LBL_cpt_driver_type", "Driver Type" ) );
         ebd_fuji_vf_driver_over_can_bus.setText( getBundleText( "LBL_ebd_fuji_vf_driver_over_can_bus", "Fuji VF Driver over CAN Bus" ) );
+        
+        /* ---------------------------------------------------------------------------- */
+        cpt_brake_control.setText( getBundleText( "LBL_cpt_brake_control", "Brake Control" ) );
+        lbl_brake_open_voltage.setText( getBundleText( "LBL_lbl_brake_open_voltage", "Open Brake Voltage" ) );
+        lbl_brake_keep_voltage.setText( getBundleText( "LBL_lbl_brake_keep_voltage", "Keep Brake Voltage" ) );
     }
 
 
@@ -569,6 +607,43 @@ public class Motion extends JPanel {
     
     public void setDriverTypeBean(DriverTypeBean bean_driverType) {
         this.ebd_fuji_vf_driver_over_can_bus.setOriginSelected( bean_driverType.isFujiVFDriverOverCANBusEnabled() );
+    }
+    
+    
+    public static class BrakeControlBean {
+    	private long BrakeOpenVoltage;
+    	private long BrakeKeepVoltage;
+    	
+		public long getBrakeOpenVoltage() {
+			return BrakeOpenVoltage;
+		}
+		public void setBrakeOpenVoltage(long brakeOpenVoltage) {
+			BrakeOpenVoltage = brakeOpenVoltage;
+		}
+		public long getBrakeKeepVoltage() {
+			return BrakeKeepVoltage;
+		}
+		public void setBrakeKeepVoltage(long brakeKeepVoltage) {
+			BrakeKeepVoltage = brakeKeepVoltage;
+		}
+    }
+    
+    public BrakeControlBean getBrakeControlBean () throws ConvertException {
+        if ( ! fmt_brake_open_voltage.checkValue() )
+            throw new ConvertException();
+        
+        if ( ! fmt_brake_keep_voltage.checkValue() )
+            throw new ConvertException();
+
+        BrakeControlBean bean_Brake = new BrakeControlBean();
+        bean_Brake.setBrakeOpenVoltage((long)fmt_brake_open_voltage.getValue() );
+        bean_Brake.setBrakeKeepVoltage((long)fmt_brake_keep_voltage.getValue() );
+        return bean_Brake;
+    }
+    
+    public void setBrakeControlBean(BrakeControlBean bean_Brake) {
+        this.fmt_brake_open_voltage.setOriginValue( bean_Brake.getBrakeOpenVoltage() );
+        this.fmt_brake_keep_voltage.setOriginValue( bean_Brake.getBrakeKeepVoltage() );
     }
     
 }

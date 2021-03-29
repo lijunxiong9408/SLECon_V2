@@ -488,6 +488,7 @@ public class IOEditorDialog extends JDialog
         btnDeviceIDOk = new PosButton( TEXT.getString( "DEVICEID_OK" ), ImageFactory.BUTTON_PAUSE.icon(40, 20) );
         btnDeviceIDOk.addActionListener( this );
         panel_1.add( btnDeviceIDOk, "cell 1 1" );
+        deviceTable.getTableHeader().setEnabled(false);
         deviceTable.getSelectionModel().addListSelectionListener( this );
 
         JPanel panel_2 = new JPanel();
@@ -946,6 +947,7 @@ public class IOEditorDialog extends JDialog
         final Item item = getIOBarItem( selectedType, selectedIndex );
         try {
             final int evtID = Integer.parseInt( txtDeviceID.getText() );
+            
             if ( evtID < 0 || evtID > 255 )
                 throw new NumberFormatException();
 

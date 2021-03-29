@@ -1681,6 +1681,19 @@ public class Parser_Module {
                 module[ OFFSET + 4 ] = ( byte )Endian.setBitsValue( module[ OFFSET + 4 ], enable ? 1 : 0, 0, 0 );
             }
         }
+        
+        public byte getFloorChangeStategy () {
+            synchronized ( module ) {
+                return (byte)Endian.getBitsValue( module[ OFFSET + 5 ], 0, 0 );
+            }
+        }
+
+
+        public void setFloorChangeStategy ( byte stategy ) {
+            synchronized ( module ) {
+                module[ OFFSET + 5 ] = ( byte )Endian.setBitsValue( module[ OFFSET + 5 ], stategy, 0, 0 );
+            }
+        }
     }
 
     

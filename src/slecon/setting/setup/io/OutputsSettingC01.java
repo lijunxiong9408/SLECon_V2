@@ -15,7 +15,7 @@ import logic.Dict;
 import logic.connection.LiftConnectionBean;
 import logic.io.crossbar.CrossBar;
 import logic.io.crossbar.OutputPinC01;
-import logic.io.crossbar.OutputSourceD01;
+import logic.io.crossbar.OutputSourceC01;
 import slecon.StartUI;
 import slecon.ToolBox;
 import slecon.component.SettingPanel;
@@ -233,21 +233,21 @@ public class OutputsSettingC01 extends SettingPanel<OutputsC01> implements Page,
             final OutputsC01.RelayOutputsBean bean_RelayOutputsBean = new OutputsC01.RelayOutputsBean();
             final OutputsC01.DigitalOutputBean bean_DigitalOutputBean = new OutputsC01.DigitalOutputBean();
 
-            bean_RelayOutputsBean.setRl1(OutputSourceD01.getByID(nvram.getUnsignedByte(NVAddress.NVADDR_OUTBP_RL1.address).intValue()));
-            bean_RelayOutputsBean.setRl2(OutputSourceD01.getByID(nvram.getUnsignedByte(NVAddress.NVADDR_OUTBP_RL2.address).intValue()));
-            bean_RelayOutputsBean.setRl3(OutputSourceD01.getByID(nvram.getUnsignedByte(NVAddress.NVADDR_OUTBP_RL3.address).intValue()));
-            bean_RelayOutputsBean.setRl4(OutputSourceD01.getByID(nvram.getUnsignedByte(NVAddress.NVADDR_OUTBP_RL4.address).intValue()));
-            bean_RelayOutputsBean.setRl5(OutputSourceD01.getByID(nvram.getUnsignedByte(NVAddress.NVADDR_OUTBP_RL5.address).intValue()));
-            bean_RelayOutputsBean.setRl6(OutputSourceD01.getByID(nvram.getUnsignedByte(NVAddress.NVADDR_OUTBP_RL6.address).intValue()));
-            bean_RelayOutputsBean.setRl10(OutputSourceD01.getByID(nvram.getUnsignedByte(NVAddress.NVADDR_OUTBP_RL10.address).intValue()));
+            bean_RelayOutputsBean.setRl1(OutputSourceC01.getByID(nvram.getUnsignedByte(NVAddress.NVADDR_OUTBP_RL1.address).intValue()));
+            bean_RelayOutputsBean.setRl2(OutputSourceC01.getByID(nvram.getUnsignedByte(NVAddress.NVADDR_OUTBP_RL2.address).intValue()));
+            bean_RelayOutputsBean.setRl3(OutputSourceC01.getByID(nvram.getUnsignedByte(NVAddress.NVADDR_OUTBP_RL3.address).intValue()));
+            bean_RelayOutputsBean.setRl4(OutputSourceC01.getByID(nvram.getUnsignedByte(NVAddress.NVADDR_OUTBP_RL4.address).intValue()));
+            bean_RelayOutputsBean.setRl5(OutputSourceC01.getByID(nvram.getUnsignedByte(NVAddress.NVADDR_OUTBP_RL5.address).intValue()));
+            bean_RelayOutputsBean.setRl6(OutputSourceC01.getByID(nvram.getUnsignedByte(NVAddress.NVADDR_OUTBP_RL6.address).intValue()));
+            bean_RelayOutputsBean.setRl10(OutputSourceC01.getByID(nvram.getUnsignedByte(NVAddress.NVADDR_OUTBP_RL10.address).intValue()));
             
-            bean_DigitalOutputBean.setP101(OutputSourceD01.getByID(nvram.getUnsignedByte(NVAddress.NVADDR_OUTBP_P10_1.address).intValue()));
-            bean_DigitalOutputBean.setP102(OutputSourceD01.getByID(nvram.getUnsignedByte(NVAddress.NVADDR_OUTBP_P10_2.address).intValue()));
-            bean_DigitalOutputBean.setP103(OutputSourceD01.getByID(nvram.getUnsignedByte(NVAddress.NVADDR_OUTBP_P10_3.address).intValue()));
-            bean_DigitalOutputBean.setP104(OutputSourceD01.getByID(nvram.getUnsignedByte(NVAddress.NVADDR_OUTBP_P10_4.address).intValue()));
-            bean_DigitalOutputBean.setP105(OutputSourceD01.getByID(nvram.getUnsignedByte(NVAddress.NVADDR_OUTBP_P10_5.address).intValue()));
-            bean_DigitalOutputBean.setP106(OutputSourceD01.getByID(nvram.getUnsignedByte(NVAddress.NVADDR_OUTBP_P10_6.address).intValue()));
-            bean_DigitalOutputBean.setP107(OutputSourceD01.getByID(nvram.getUnsignedByte(NVAddress.NVADDR_OUTBP_P10_7.address).intValue()));
+            bean_DigitalOutputBean.setP101(OutputSourceC01.getByID(nvram.getUnsignedByte(NVAddress.NVADDR_OUTBP_P10_1.address).intValue()));
+            bean_DigitalOutputBean.setP102(OutputSourceC01.getByID(nvram.getUnsignedByte(NVAddress.NVADDR_OUTBP_P10_2.address).intValue()));
+            bean_DigitalOutputBean.setP103(OutputSourceC01.getByID(nvram.getUnsignedByte(NVAddress.NVADDR_OUTBP_P10_3.address).intValue()));
+            bean_DigitalOutputBean.setP104(OutputSourceC01.getByID(nvram.getUnsignedByte(NVAddress.NVADDR_OUTBP_P10_4.address).intValue()));
+            bean_DigitalOutputBean.setP105(OutputSourceC01.getByID(nvram.getUnsignedByte(NVAddress.NVADDR_OUTBP_P10_5.address).intValue()));
+            bean_DigitalOutputBean.setP106(OutputSourceC01.getByID(nvram.getUnsignedByte(NVAddress.NVADDR_OUTBP_P10_6.address).intValue()));
+            bean_DigitalOutputBean.setP107(OutputSourceC01.getByID(nvram.getUnsignedByte(NVAddress.NVADDR_OUTBP_P10_7.address).intValue()));
 
             if (solid == null)
                 solid = new Solid(bean_RelayOutputsBean, bean_DigitalOutputBean);

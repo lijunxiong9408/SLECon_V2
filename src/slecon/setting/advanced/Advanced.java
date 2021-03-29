@@ -117,6 +117,11 @@ public class Advanced extends JPanel implements ActionListener, ChangeListener {
     private ValueTextField 		  fmt_temperature_stop;
     
     /* ---------------------------------------------------------------------------- */
+    private JLabel                lbl_phase_check;
+    private PosButton			  btn_phase_check_enable;
+    private PosButton			  btn_phase_check_disable;
+    
+    /* ---------------------------------------------------------------------------- */
     private JLabel                cpt_others;
     private JLabel                lbl_reverse_run_position_limit;
     private ValueTextField        fmt_reverse_run_position_limit;
@@ -161,9 +166,14 @@ public class Advanced extends JPanel implements ActionListener, ChangeListener {
     	lbl_retry_count.setEnabled(enable);
     	fmt_retry_count.setEnabled(enable);
     	
+    	lbl_phase_check.setEnabled(enable);
+    	btn_phase_check_enable.setEnabled(enable);
+    	btn_phase_check_disable.setEnabled(enable);
+    	
     	lbl_reverse_run_position_limit.setEnabled(enable);
     	fmt_reverse_run_position_limit.setEnabled(enable);
     	btn_reload_nv_data_default.setEnabled(enable);
+    
     	
     	cpt_brake_monitor.setEnabled(enable);
     	lbl_brake_retry_open_count.setEnabled(enable);
@@ -459,10 +469,27 @@ public class Advanced extends JPanel implements ActionListener, ChangeListener {
         add( fmt_temperature_stop, "span 1, wrap 30, left, top" );
         
         /* ---------------------------------------------------------------------------- */
+        lbl_phase_check = new JLabel();
+        btn_phase_check_enable = new PosButton(ImageFactory.BUTTON_PAUSE.icon(87, 30), ImageFactory.BUTTON_START.icon(87, 30));
+        btn_phase_check_disable = new PosButton(ImageFactory.BUTTON_PAUSE.icon(87, 30), ImageFactory.BUTTON_START.icon(87, 30));
+        
+        btn_phase_check_enable.addActionListener(this);
+        btn_phase_check_disable.addActionListener(this);
+        
+        setCaptionStyle(lbl_phase_check);
+        setButtonStyle(btn_phase_check_enable);
+        setButtonStyle(btn_phase_check_disable);
+        
+        add(lbl_phase_check, "gapbottom 18-12, span, aligny center, top");
+        add(btn_phase_check_enable,"skip 2, span, left, top");
+        add(btn_phase_check_disable,"skip 2, span , wrap 30, left, top");
+        
+        /* ---------------------------------------------------------------------------- */
         cpt_others = new JLabel();
         lbl_reverse_run_position_limit = new JLabel();
         fmt_reverse_run_position_limit = new ValueTextField();
         btn_reload_nv_data_default = new PosButton(ImageFactory.BUTTON_PAUSE.icon(87, 30), ImageFactory.BUTTON_START.icon(87, 30));
+        
         btn_reload_nv_data_default.addActionListener(this);
         setCaptionStyle(cpt_others);
         // @CompoentSetting<Fmt>( lbl_reverse_run_position_limit , fmt_reverse_run_position_limit )
@@ -471,7 +498,6 @@ public class Advanced extends JPanel implements ActionListener, ChangeListener {
         fmt_reverse_run_position_limit.setHorizontalAlignment(SwingConstants.RIGHT);
         fmt_reverse_run_position_limit.setScope(Double.class, 0D, 1000D, false, false);
         fmt_reverse_run_position_limit.setEmptyValue(0D);
-        
         setButtonStyle( btn_reload_nv_data_default );
         
         add(cpt_others, "gapbottom 18-12, span, aligny center, top");
@@ -543,6 +569,11 @@ public class Advanced extends JPanel implements ActionListener, ChangeListener {
         lbl_ccf_stop_delay.setText( getBundleText( "LBL_lbl_ccf_stop_delay", "Turn Off CCF" ) );
         lbl_temperature_start.setText( getBundleText( "LBL_lbl_temperature_start", "Turn On CCF Temperature" ) );
         lbl_temperature_stop.setText( getBundleText( "LBL_lbl_temperature_stop", "Turn Off CCF Temperature" ) );
+        
+        /* ---------------------------------------------------------------------------- */
+        lbl_phase_check.setText( getBundleText( "LBL_lbl_phase_check", "Phase check" ) );
+        btn_phase_check_enable.setText( getBundleText( "LBL_btn_phase_check_enable", "enable" ) );
+        btn_phase_check_disable.setText( getBundleText( "LBL_btn_phase_check_disable", "disable" ) );
         
         /* ---------------------------------------------------------------------------- */
         cpt_others.setText( getBundleText( "LBL_cpt_others", "Others" ) );
@@ -1073,6 +1104,17 @@ public class Advanced extends JPanel implements ActionListener, ChangeListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
+		
+		if(e.getSource() == btn_phase_check_enable) {
+			if ( settingPanel instanceof AdvancedSetting )
+				( ( AdvancedSetting )settingPanel ).PhaseCheckUp(true);
+		}
+		
+		if(e.getSource() == btn_phase_check_disable) {
+			if ( settingPanel instanceof AdvancedSetting )
+				( ( AdvancedSetting )settingPanel ).PhaseCheckUp(false);
+		}
+		
 		if(e.getSource() == btn_reload_nv_data_default) {
 			if(  JOptionPane.showConfirmDialog( StartUI.getFrame(), TEXT.getString( "Warning_desc" ), TEXT.getString( "Warning_title" ),
 	                JOptionPane.YES_NO_OPTION ) == JOptionPane.YES_OPTION ) {

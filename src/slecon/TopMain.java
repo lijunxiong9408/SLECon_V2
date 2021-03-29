@@ -111,7 +111,7 @@ public class TopMain extends JPanel {
         lblVersion = new JLabel();
         lblVersion.setHorizontalAlignment( SwingConstants.RIGHT );
         lblVersion.setVerticalAlignment( SwingConstants.CENTER );
-        lblVersion.setText("Version : 2.1.8");
+        lblVersion.setText("Version : 2.1.9");
         
         lblMemoryUsage = new JLabel( "" );
         lblValidity = new JLabel();
@@ -151,7 +151,7 @@ public class TopMain extends JPanel {
         body = new JPanel();
         add( body, "cell 0 1 2 1" );
         body.setLayout( new BorderLayout( 0, 0 ) );
-
+        /*
         Properties p = new Properties();
         try {
 			p.load( BaseFactory.class.getClassLoader().getResourceAsStream( "config.properties" ) );
@@ -180,7 +180,7 @@ public class TopMain extends JPanel {
 			e1.printStackTrace();
 			System.exit(0);
 		}
-
+		*/
     }
     
     public static long getTime(String time_url) {

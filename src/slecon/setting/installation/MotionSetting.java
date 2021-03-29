@@ -18,6 +18,7 @@ import slecon.component.SettingPanel;
 import slecon.component.Workspace;
 import slecon.interfaces.Page;
 import slecon.interfaces.SetupView;
+import slecon.setting.installation.Motion.BrakeControlBean;
 import slecon.setting.installation.Motion.DriverTypeBean;
 import slecon.setting.installation.Motion.EncoderBean;
 import slecon.setting.installation.Motion.MotorSpecificationBean;
@@ -193,6 +194,7 @@ public class MotionSetting extends SettingPanel<Motion> implements Page, LiftDat
             final Motion.EncoderBean            bean_Encoder            = new Motion.EncoderBean();
             final Motion.InformationBean        bean_Information        = new Motion.InformationBean();
             final Motion.DriverTypeBean         bean_drivertype         = new Motion.DriverTypeBean();
+            final Motion.BrakeControlBean		bean_brake_control      = new Motion.BrakeControlBean();
 
             /** Motor Specification. */
             bean_MotorSpecification.setRevolutionPerMinuteRpm( nvram.getUnsignedInt( ( short )0x0920 ) );       // NVADDR_MOTOR_RPM (ul)
@@ -211,13 +213,17 @@ public class MotionSetting extends SettingPanel<Motion> implements Page, LiftDat
             /** Driver Type. */
             bean_drivertype.setFujiVFDriverOverCANBusEnabled( nvram.getUnsignedShort( (short)0x1080 ) == 1 );
             
+            /** Brake Control. */
+            bean_brake_control.setBrakeOpenVoltage( nvram.getUnsignedByte((short)0x1976) );
+            bean_brake_control.setBrakeKeepVoltage( nvram.getUnsignedByte((short)0x1977) );
+            
 
             Double maxlinears = bean_MotorSpecification.getMaximumLinearSpeedMmS();
             double value      = 1000.0 * ( 0.4 * Math.pow( maxlinears / 1000, 2.0 ) + 0.1 * ( maxlinears / 1000.0f ) + 1.0 );
             bean_Information.setRecommendedShaftLimitLslUslLength( String.format( "%.2f", value ) );
 
             if (solid == null)
-                solid = new Solid(bean_MotorSpecification, bean_Encoder, bean_drivertype);
+                solid = new Solid(bean_MotorSpecification, bean_Encoder, bean_drivertype, bean_brake_control);
             
             SwingUtilities.invokeLater( new Runnable() {
                 @Override
@@ -226,6 +232,7 @@ public class MotionSetting extends SettingPanel<Motion> implements Page, LiftDat
                     app.setEncoderBean( bean_Encoder );
                     app.setInformationBean( bean_Information );
                     app.setDriverTypeBean( bean_drivertype );
+                    app.setBrakeControlBean(bean_brake_control);
                 }
             } );
         } catch ( Exception e ) {
@@ -239,6 +246,7 @@ public class MotionSetting extends SettingPanel<Motion> implements Page, LiftDat
             MotorSpecificationBean bean_MotorSpecification = app.getMotorSpecificationBean();
             EncoderBean            bean_Encoder            = app.getEncoderBean();
             DriverTypeBean         bean_DriverType         = app.getDriverTypeBean();
+            BrakeControlBean	   bean_brake_control	   = app.getBrakeControlBean();
 
             /** Motor Specification. */
             nvram.setInt( ( short )0x0920, bean_MotorSpecification.getRevolutionPerMinuteRpm().intValue() );       // NVADDR_MOTOR_RPM (ul)
@@ -250,10 +258,15 @@ public class MotionSetting extends SettingPanel<Motion> implements Page, LiftDat
                                             ? ( byte )1
                                             : ( byte )0 );                                                 // NVADDR_QEI_DIR (uc)
             
-            /** Driver Type */
+            /** Driver Type. */
             nvram.setShort( ( short )0x1080, bean_DriverType.isFujiVFDriverOverCANBusEnabled()
                     ? ( byte )1
                     : ( byte )0 );   
+            
+            /** Brake Control. */
+            nvram.setByte( ( short )0x1976, (byte)bean_brake_control.getBrakeOpenVoltage() );  
+            nvram.setByte( ( short )0x1977, (byte)bean_brake_control.getBrakeKeepVoltage() );  
+            
             nvram.commit();
             return true;
         } catch ( Exception e ) {
@@ -288,15 +301,16 @@ public class MotionSetting extends SettingPanel<Motion> implements Page, LiftDat
         private final Motion.MotorSpecificationBean bean_MotorSpecification;
         private final Motion.EncoderBean            bean_Encoder;
         private final Motion.DriverTypeBean         bean_drivertype;
+        private final Motion.BrakeControlBean		bean_brake_control;
 
 
 
-
-        private Solid ( MotorSpecificationBean bean_MotorSpecification, EncoderBean bean_Encoder, DriverTypeBean bean_drivertype ) {
+        private Solid ( MotorSpecificationBean bean_MotorSpecification, EncoderBean bean_Encoder, DriverTypeBean bean_drivertype, BrakeControlBean bean_brake_control ) {
             super();
             this.bean_MotorSpecification = bean_MotorSpecification;
             this.bean_Encoder            = bean_Encoder;
             this.bean_drivertype         = bean_drivertype;
+            this.bean_brake_control      = bean_brake_control;
         }
     }
 }

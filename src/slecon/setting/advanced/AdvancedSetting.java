@@ -439,6 +439,10 @@ public class AdvancedSetting extends SettingPanel<Advanced> implements Page, Lif
     	}
     }
     
+    public void PhaseCheckUp( boolean enable ) {
+    	misc.mcs((short)0x282a, new byte[enable?1:0]);
+    		
+    }
     public void reloadDefaultNVRAM() {
     	misc.mcs((short)0x2819, new byte[0]); // [CMD] CMD_RELOAD_DEFAULT_NVRAM
     }

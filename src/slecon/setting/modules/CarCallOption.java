@@ -43,6 +43,7 @@ import slecon.component.iobar.IOBar;
 import slecon.component.iobardialog.IOEditorDialog;
 import slecon.interfaces.ConvertException;
 import slecon.setting.modules.CarCallOption.Point2OperationTableModel;
+import slecon.setting.modules.FloorChangeStategy.Floor_Change_Stategy;
 import base.cfg.FontFactory;
 import logic.EventID;
 
@@ -112,6 +113,11 @@ public class CarCallOption extends JPanel {
     public static final ResourceBundle  TEXT    = ToolBox.getResourceBundle( "setting.module.CarCallOption" );
     private boolean                     started = false;
     private SettingPanel<CarCallOption> settingPanel;
+    /* ---------------------------------------------------------------------------- */
+    private JLabel                      cpt_floor_change_stategy;
+    private MyComboBox					cbo_floor_change_stategy;
+    
+    /* ---------------------------------------------------------------------------- */
     private JLabel                      cpt_anti_nuisance_car_call_operation;
     private ValueCheckBox               ebd_enabled;
     private JLabel                      lbl_percentage;
@@ -154,6 +160,13 @@ public class CarCallOption extends JPanel {
     private void initGUI () {
         setBackground( StartUI.SUB_BACKGROUND_COLOR );
         setLayout( new MigLayout( "fillx, ins 25, gap 0 12", "[30::30][30::30][150::150][150::150][]" ) );
+        cpt_floor_change_stategy = new JLabel();
+        cbo_floor_change_stategy = new MyComboBox(Floor_Change_Stategy.values());
+        setCaptionStyle( cpt_floor_change_stategy );
+        add(cpt_floor_change_stategy, "gapbottom 18-12, span, top");
+        add(cbo_floor_change_stategy, "skip 1, span, wrap 30, top");
+        
+        /* ---------------------------------------------------------------------------- */
         cpt_anti_nuisance_car_call_operation = new JLabel();
         ebd_enabled                          = new ValueCheckBox();
         lbl_percentage                       = new JLabel();
@@ -280,6 +293,9 @@ public class CarCallOption extends JPanel {
 
 
     private void loadI18N () {
+    	cpt_floor_change_stategy.setText(TEXT.getString( "floor_change_stategy" ));
+    	
+    	/* ---------------------------------------------------------------------------- */
         cpt_anti_nuisance_car_call_operation.setText( TEXT.getString( "anti_nuisance_car_call_operation" ) );
         ebd_enabled.setText( TEXT.getString( "anti_nuisance_car_call_operation_enabled" ) );
         lbl_percentage.setText( TEXT.getString( "percentage" ) );
@@ -383,7 +399,16 @@ public class CarCallOption extends JPanel {
             } );
         }
     }
-
+    
+    public FloorTextChangeStategy getFloorChangeStategy() {
+    	FloorTextChangeStategy stategy = new FloorTextChangeStategy();
+    	stategy.setStategy(cbo_floor_change_stategy.getSelectedIndex());
+    	return stategy;
+    }
+    
+    public void setFloorChangeStategy( FloorTextChangeStategy stategy ) {
+    	cbo_floor_change_stategy.setSelectedIndex( stategy.getStategy() == 1? 1 : 0 );
+    }
 
     public AntiNuisanceCarCallOperationBean getAntiNuisanceCarCallOperationBean () throws ConvertException {
         if ( ! fmt_percentage.checkValue() )
@@ -481,7 +506,18 @@ public class CarCallOption extends JPanel {
         gui.setSettingPanel( panel );
         return gui;
     }
+    
+    public static class FloorTextChangeStategy{
+    	private int stategy;
 
+		public int getStategy() {
+			return stategy;
+		}
+
+		public void setStategy(int stategy) {
+			this.stategy = stategy;
+		}
+    }
 
     public static class AntiNuisanceCarCallOperationBean {
         private Boolean enabled;

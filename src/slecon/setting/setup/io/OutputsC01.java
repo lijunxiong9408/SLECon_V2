@@ -17,7 +17,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import logic.io.crossbar.OutputPinC01;
-import logic.io.crossbar.OutputSourceD01;
+import logic.io.crossbar.OutputSourceC01;
 import net.miginfocom.swing.MigLayout;
 import slecon.StartUI;
 import slecon.ToolBox;
@@ -130,11 +130,11 @@ public class OutputsC01 extends JPanel {
     
     
     private void initGUI () {
-        OutputSourceD01[] combo_values = new OutputSourceD01[ OutputSourceD01.values().length ];
+        OutputSourceC01[] combo_values = new OutputSourceC01[ OutputSourceC01.values().length ];
 
         // combo_values[0] = null;
-        for ( int i = 0 ; i < OutputSourceD01.values().length ; i++ )
-            combo_values[ i ] = OutputSourceD01.values()[ i ];
+        for ( int i = 0 ; i < OutputSourceC01.values().length ; i++ )
+            combo_values[ i ] = OutputSourceC01.values()[ i ];
         setBackground( StartUI.SUB_BACKGROUND_COLOR );
         setLayout( new MigLayout( "ins 24, gap 10 6", "[30::30][20::20][50::50][280::280][50::50][]" ) );
         cpt_relay_outputs = new JLabel();
@@ -429,13 +429,13 @@ public class OutputsC01 extends JPanel {
     public RelayOutputsBean getRelayOutputsBean () throws ConvertException {
         RelayOutputsBean bean_relayOutputs = new RelayOutputsBean();
         
-        bean_relayOutputs.setRl1( ( OutputSourceD01 )cbo_rl1.getSelectedItem() );
-        bean_relayOutputs.setRl2( ( OutputSourceD01 )cbo_rl2.getSelectedItem() );
-        bean_relayOutputs.setRl3( ( OutputSourceD01 )cbo_rl3.getSelectedItem() );
-        bean_relayOutputs.setRl4( ( OutputSourceD01 )cbo_rl4.getSelectedItem() );
-        bean_relayOutputs.setRl5( ( OutputSourceD01 )cbo_rl5.getSelectedItem() );
-        bean_relayOutputs.setRl6( ( OutputSourceD01 )cbo_rl6.getSelectedItem() );
-        bean_relayOutputs.setRl10( ( OutputSourceD01 )cbo_rl10.getSelectedItem() );
+        bean_relayOutputs.setRl1( ( OutputSourceC01 )cbo_rl1.getSelectedItem() );
+        bean_relayOutputs.setRl2( ( OutputSourceC01 )cbo_rl2.getSelectedItem() );
+        bean_relayOutputs.setRl3( ( OutputSourceC01 )cbo_rl3.getSelectedItem() );
+        bean_relayOutputs.setRl4( ( OutputSourceC01 )cbo_rl4.getSelectedItem() );
+        bean_relayOutputs.setRl5( ( OutputSourceC01 )cbo_rl5.getSelectedItem() );
+        bean_relayOutputs.setRl6( ( OutputSourceC01 )cbo_rl6.getSelectedItem() );
+        bean_relayOutputs.setRl10( ( OutputSourceC01 )cbo_rl10.getSelectedItem() );
         
         return bean_relayOutputs;
     }
@@ -444,13 +444,13 @@ public class OutputsC01 extends JPanel {
     public DigitalOutputBean getDigitalOutputBean () throws ConvertException {
         DigitalOutputBean bean_digitalOutput = new DigitalOutputBean();
         
-        bean_digitalOutput.setP101( ( OutputSourceD01 )cbo_p10_1.getSelectedItem() );
-        bean_digitalOutput.setP102( ( OutputSourceD01 )cbo_p10_2.getSelectedItem() );
-        bean_digitalOutput.setP103( ( OutputSourceD01 )cbo_p10_3.getSelectedItem() );
-        bean_digitalOutput.setP104( ( OutputSourceD01 )cbo_p10_4.getSelectedItem() );
-        bean_digitalOutput.setP105( ( OutputSourceD01 )cbo_p10_5.getSelectedItem() );
-        bean_digitalOutput.setP106( ( OutputSourceD01 )cbo_p10_6.getSelectedItem() );
-        bean_digitalOutput.setP107( ( OutputSourceD01 )cbo_p10_7.getSelectedItem() );
+        bean_digitalOutput.setP101( ( OutputSourceC01 )cbo_p10_1.getSelectedItem() );
+        bean_digitalOutput.setP102( ( OutputSourceC01 )cbo_p10_2.getSelectedItem() );
+        bean_digitalOutput.setP103( ( OutputSourceC01 )cbo_p10_3.getSelectedItem() );
+        bean_digitalOutput.setP104( ( OutputSourceC01 )cbo_p10_4.getSelectedItem() );
+        bean_digitalOutput.setP105( ( OutputSourceC01 )cbo_p10_5.getSelectedItem() );
+        bean_digitalOutput.setP106( ( OutputSourceC01 )cbo_p10_6.getSelectedItem() );
+        bean_digitalOutput.setP107( ( OutputSourceC01 )cbo_p10_7.getSelectedItem() );
         
         return bean_digitalOutput;
     }
@@ -538,83 +538,83 @@ public class OutputsC01 extends JPanel {
 
 
     public static class DigitalOutputBean {
-        private OutputSourceD01 p101;
-        private OutputSourceD01 p102;
-        private OutputSourceD01 p103;
-        private OutputSourceD01 p104;
-        private OutputSourceD01 p105;
-        private OutputSourceD01 p106;
-        private OutputSourceD01 p107;
+        private OutputSourceC01 p101;
+        private OutputSourceC01 p102;
+        private OutputSourceC01 p103;
+        private OutputSourceC01 p104;
+        private OutputSourceC01 p105;
+        private OutputSourceC01 p106;
+        private OutputSourceC01 p107;
 
 
 
 
-        public OutputSourceD01 getP101 () {
+        public OutputSourceC01 getP101 () {
             return this.p101;
         }
 
 
-        public OutputSourceD01 getP102 () {
+        public OutputSourceC01 getP102 () {
             return this.p102;
         }
 
 
-        public OutputSourceD01 getP103 () {
+        public OutputSourceC01 getP103 () {
             return this.p103;
         }
 
 
-        public OutputSourceD01 getP104 () {
+        public OutputSourceC01 getP104 () {
             return this.p104;
         }
 
 
-        public OutputSourceD01 getP105 () {
+        public OutputSourceC01 getP105 () {
             return this.p105;
         }
 
 
-        public OutputSourceD01 getP106 () {
+        public OutputSourceC01 getP106 () {
             return this.p106;
         }
 
 
-        public OutputSourceD01 getP107 () {
+        public OutputSourceC01 getP107 () {
             return this.p107;
         }
 
 
-        public void setP101 ( OutputSourceD01 p101 ) {
+        public void setP101 ( OutputSourceC01 p101 ) {
             this.p101 = p101;
         }
 
 
-        public void setP102 ( OutputSourceD01 p102 ) {
+        public void setP102 ( OutputSourceC01 p102 ) {
             this.p102 = p102;
         }
 
 
-        public void setP103 ( OutputSourceD01 p103 ) {
+        public void setP103 ( OutputSourceC01 p103 ) {
             this.p103 = p103;
         }
 
 
-        public void setP104 ( OutputSourceD01 p104 ) {
+        public void setP104 ( OutputSourceC01 p104 ) {
             this.p104 = p104;
         }
 
 
-        public void setP105 ( OutputSourceD01 p105 ) {
+        public void setP105 ( OutputSourceC01 p105 ) {
             this.p105 = p105;
         }
 
 
-        public void setP106 ( OutputSourceD01 p106 ) {
+        public void setP106 ( OutputSourceC01 p106 ) {
             this.p106 = p106;
         }
 
 
-        public void setP107 ( OutputSourceD01 p107 ) {
+        public void setP107 ( OutputSourceC01 p107 ) {
             this.p107 = p107;
         }
     }
@@ -623,83 +623,83 @@ public class OutputsC01 extends JPanel {
 
 
     public static class RelayOutputsBean {
-        private OutputSourceD01 rl1;
-        private OutputSourceD01 rl2;
-        private OutputSourceD01 rl3;
-        private OutputSourceD01 rl4;
-        private OutputSourceD01 rl5;
-        private OutputSourceD01 rl6;
-        private OutputSourceD01 rl10;
+        private OutputSourceC01 rl1;
+        private OutputSourceC01 rl2;
+        private OutputSourceC01 rl3;
+        private OutputSourceC01 rl4;
+        private OutputSourceC01 rl5;
+        private OutputSourceC01 rl6;
+        private OutputSourceC01 rl10;
 
 
 
 
-        public OutputSourceD01 getRl1 () {
+        public OutputSourceC01 getRl1 () {
             return this.rl1;
         }
 
 
-        public OutputSourceD01 getRl2 () {
+        public OutputSourceC01 getRl2 () {
             return this.rl2;
         }
 
 
-        public OutputSourceD01 getRl3 () {
+        public OutputSourceC01 getRl3 () {
             return this.rl3;
         }
 
 
-        public OutputSourceD01 getRl4 () {
+        public OutputSourceC01 getRl4 () {
             return this.rl4;
         }
 
 
-        public OutputSourceD01 getRl5 () {
+        public OutputSourceC01 getRl5 () {
             return this.rl5;
         }
 
 
-        public OutputSourceD01 getRl6 () {
+        public OutputSourceC01 getRl6 () {
             return this.rl6;
         }
 
 
-        public OutputSourceD01 getRl10 () {
+        public OutputSourceC01 getRl10 () {
             return this.rl10;
         }
 
 
-        public void setRl1 ( OutputSourceD01 rl1 ) {
+        public void setRl1 ( OutputSourceC01 rl1 ) {
             this.rl1 = rl1;
         }
 
 
-        public void setRl2 ( OutputSourceD01 rl2 ) {
+        public void setRl2 ( OutputSourceC01 rl2 ) {
             this.rl2 = rl2;
         }
 
 
-        public void setRl3 ( OutputSourceD01 rl3 ) {
+        public void setRl3 ( OutputSourceC01 rl3 ) {
             this.rl3 = rl3;
         }
 
 
-        public void setRl4 ( OutputSourceD01 rl4 ) {
+        public void setRl4 ( OutputSourceC01 rl4 ) {
             this.rl4 = rl4;
         }
 
 
-        public void setRl5 ( OutputSourceD01 rl5 ) {
+        public void setRl5 ( OutputSourceC01 rl5 ) {
             this.rl5 = rl5;
         }
 
 
-        public void setRl6 ( OutputSourceD01 rl6 ) {
+        public void setRl6 ( OutputSourceC01 rl6 ) {
             this.rl6 = rl6;
         }
 
 
-        public void setRl10 ( OutputSourceD01 rl10 ) {
+        public void setRl10 ( OutputSourceC01 rl10 ) {
             this.rl10 = rl10;
         }
     }
